@@ -21,7 +21,6 @@ int main()
 
     tree1.AddFruit(7);
     tree1.AddFruit(5);
-    //    /*
     tree1.AddFruit(9);
     tree1.AddFruit(15);
     tree1.AddFruit(1);
@@ -73,7 +72,7 @@ int main()
     //    }
 
 
-    //*/
+    
 
 
     return 0;
