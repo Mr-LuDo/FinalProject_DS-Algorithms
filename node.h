@@ -15,11 +15,9 @@ class Node {
             tree_parent_(nullptr), tree_left_(nullptr), tree_right_(nullptr)
             {}
 
-//        Node(int fruitID, int treeID) :
-//            fruitID_(fruitID), ll_source_(nullptr),
-//            ll_next_(nullptr), ll_previous_(nullptr), treeID_(treeID) {}
+        ~Node() = default;
 
-        void UpdateTree(Node* parent,Node* left, Node* right, Tree* tree) {
+        void UpdateTree(Tree* tree, Node* parent, Node* left, Node* right) {
             tree_ = tree;
             tree_parent_ = parent;
             tree_left_ = left;
@@ -35,24 +33,11 @@ class Node {
             cout << "-------------" << endl;
             cout << "tree data: " << endl;
             cout << "treeID_ = " << treeID_ << endl;
-            cout << "tree_this_ = " << this << endl;
+            cout << "tree_ = " << tree_ << endl;
+            cout << "Node_this_ = " << this << endl;
             cout << "tree_parent_ = " << tree_parent_ << endl;
             cout << "tree_left_ = " << tree_left_ << endl;
             cout << "tree_right_ = " << tree_right_ << endl;
-        }
-
-        bool operator==(Node& other) {
-            if(fruitID_ == other.fruitID_ &&
-               ll_next_ == other.ll_next_ &&
-               ll_previous_ == other.ll_previous_ )
-                cout << "node == node" << endl;
-                return true;
-            cout << "node != node" << endl;
-            return false;
-        }
-
-        bool operator!=(Node& other) {
-            return !(*this == other);
         }
 
         int fruitID_;
@@ -65,7 +50,6 @@ class Node {
         Node* tree_parent_;
         Node* tree_left_;
         Node* tree_right_;
-
 };
 
 #endif // NODE_H

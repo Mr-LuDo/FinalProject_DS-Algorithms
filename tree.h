@@ -18,15 +18,15 @@ class Tree
         virtual ~Tree() = default;
 
         void AddFruit(int fruitID) {
-            if(linkedlist_->PushFrontfruit(fruitID, treeID_) == false)
+            if(linkedlist_->PushFrontfruit(fruitID, treeID_, this) == false)
                 return;
 
-            Node* temp_node = linkedlist_->first_node_;
+            Node* temp_node = linkedlist_->Front();
             if(isEmpty_) {
                 isEmpty_ = false;
                 ++tree_size_;
                 root_ = temp_node;
-                root_->UpdateTree(nullptr, nullptr, nullptr, this);
+                root_->UpdateTree(this, nullptr, nullptr, nullptr);
                 lowestNodeId_ = temp_node;
                 highestNodeId_ = temp_node;
             }
@@ -79,21 +79,19 @@ class Tree
 // -------------------------------- iterator ------------------------------------------------------
         class Iterator {
             public:
-                Iterator(Tree* tree, Node* node) : root_(tree->root_), currentNode_(node) {}
+                Iterator(Tree* tree, Node* node) : tree_(tree), currentNode_(node) {}
                 ~Iterator() = default;
 
                 Node* operator*() { return currentNode_; }
 
                 bool operator==(const Iterator& other) {
-                    if(currentNode_ == other.currentNode_) {
-                        cout << "iterator- this == other" << endl;
+                    if(currentNode_ == other.currentNode_)
                         return true;
-                    }
-                    if(currentNode_->treeID_ != other.currentNode_->treeID_) {
-                        cout << "iterator- wrong tree." << endl;
-                        return false;
-                    }
-                  //  if(currentNode_->fruitID_ == other.currentNode_->fruitID_) return true;
+                    
+                    //if(currentNode_->treeID_ != other.currentNode_->treeID_) {
+                    //    cout << "iterator- wrong tree." << endl;
+                    //    return false;
+                    //}
                     return false;
                 }
 
@@ -102,59 +100,47 @@ class Tree
                 }
 
                 Iterator& operator++() {
-                    currentNode_ = currentNode_->tree_->Next(currentNode_);
+                    currentNode_ = tree_->Next(currentNode_);
                     return *this;
                 }
 
-//                Iterator& operator++() {
-//                    if(currentNode_->tree_right_ != nullptr) {
-//                        currentNode_ = currentNode_->tree_right_;
-//                        return *this;
-//                    }
-//                    if(currentNode_->tree_parent_ == nullptr) {
-//                        cout << "iterator- Error no parent" << endl;
-//                        return *this;
-//                    }
-//                    currentNode_ = currentNode_->tree_parent_;
-//                    return *this;
-//                }
-
-                Node* Min(Node* node) {
-                    while(node->tree_left_ != nullptr) {
-                        node = node->tree_left_;
-                    }
-                    return node;
-                }
-
-//            private:
-                Node* root_;
+            private:
+                Tree* tree_;
                 Node* currentNode_;
-
         };
 // ------------------------------- iterator -------------------------------------------------------
         Iterator begin() {
-//            if(isEmpty_ == false)
-                return Iterator(this, lowestNodeId_);
+            return Iterator(this, lowestNodeId_);
         }
         Iterator end() {
             return Iterator(this, nullptr);
         }
 
-
         Node* Next(Node* node) {
-            if(node->tree_right_ == nullptr) {
-                if(node == node->tree_parent_->tree_right_)
-                    return nullptr;
-                return node->tree_parent_;
+            if (node->tree_right_ == nullptr) {
+                while (1) {
+                    cout << "next loop" << endl;
+                    if (node->tree_parent_ == nullptr)
+                        return nullptr;
+                    if (node->tree_parent_->tree_left_ == node)
+                        return node->tree_parent_;
+                    if (node->tree_parent_->tree_right_ == node)
+                        node = node->tree_parent_;
+                }
             }
             return Min(node->tree_right_);
         }
 
         Node* Previous(Node* node) {
-            if(node->tree_left_ == nullptr) {
-                if(node == node->tree_parent_->tree_left_)
-                    return nullptr;
-                return node->tree_parent_;
+            if (node->tree_left_ == nullptr) {
+                while (1) {
+                    if (node->tree_parent_ == nullptr)
+                        return nullptr;
+                    if (node->tree_parent_->tree_right_ == node)
+                        return node->tree_parent_;
+                    if (node->tree_parent_->tree_left_ == node)
+                        node = node->tree_parent_;
+                }
             }
             return Max(node->tree_left_);
         }
@@ -167,9 +153,8 @@ class Tree
         }
 
         Node* Min(Node* node) {
-            while(node->tree_left_ != nullptr) {
+            while (node->tree_left_ != nullptr)
                 node = node->tree_left_;
-            }
             return node;
         }
 
@@ -221,7 +206,6 @@ class Tree
         Node* lowestNodeId_;
         Node* highestNodeId_;
         Node* root_;
-
 };
 
 #endif // TREE_H

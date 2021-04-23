@@ -18,13 +18,17 @@ int main()
 
 
     tree1.AddFruit(7);
-
     tree1.AddFruit(7);
     tree1.AddFruit(5);
     tree1.AddFruit(9);
     tree1.AddFruit(15);
     tree1.AddFruit(1);
     tree1.AddFruit(9);
+    tree1.AddFruit(155);
+    tree1.AddFruit(91);
+    tree1.AddFruit(11);
+    tree1.AddFruit(6);
+    tree1.AddFruit(52);
     tree1.Printtreedata();
     cout << "linked list size: " << LL1.size() << endl;
     cout << "tree size: " << tree1.size() << endl;
@@ -40,22 +44,13 @@ int main()
 
     cout << endl << endl <<
         " ----------------- Tree iterator -----------------" << endl << endl;
-
-    //     for(auto it = tree1.begin(); it != tree1.end(); ++it) {
-    //     for(auto it : tree1) {
-    auto it = tree1.begin();
-    for (auto i = 0; i < tree1.size(); ++i, ++it) {
+    for(auto it : tree1) {
         cout << "this is iterator result: " << endl;
-        if (*it == nullptr) {
-            cout << "no node, break out..." << endl;
-            break;
-        }
-        (*it)->PrintNode();
+        cout << "iterator curent node value: " << (it)->fruitID_ << endl;
+        (it)->PrintNode();
         cout << "---------------------------------------" << endl << endl;
     }
 
-    cout << endl << endl <<
-        " ----------------- Tree iterator -----------------" << endl << endl;
 
 
     //
