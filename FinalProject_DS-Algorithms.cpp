@@ -2,9 +2,9 @@
 //
 
 #include <iostream>
+#include "Node.h"
 #include "linked_list.h"
 #include "tree.h"
-#include "Node.h"
 
 using namespace std;
 
@@ -13,8 +13,10 @@ int main()
 {
     LinkedListExtraData LL1;
 
-    int treeID = 8;
-    Tree tree1(treeID, &LL1);
+    int treeID1 = 8;
+    int treeID2 = 2;
+    Tree tree1(treeID1, &LL1);
+    Tree tree2(treeID2, &LL1);
 
 
     tree1.AddFruit(7);
@@ -29,9 +31,25 @@ int main()
     tree1.AddFruit(11);
     tree1.AddFruit(6);
     tree1.AddFruit(52);
+
+
+    tree2.AddFruit(17);
+    tree2.AddFruit(71);
+    tree2.AddFruit(55);
+    tree2.AddFruit(96);
+    tree2.AddFruit(115);
+    tree2.AddFruit(11);
+    tree2.AddFruit(79);
+    tree2.AddFruit(125);
+    tree2.AddFruit(91);
+    tree2.AddFruit(115);
+    tree2.AddFruit(67);
+    tree2.AddFruit(8);
+
     tree1.Printtreedata();
     cout << "linked list size: " << LL1.size() << endl;
-    cout << "tree size: " << tree1.size() << endl;
+    cout << "tree 1 size: " << tree1.size() << endl;
+    cout << "tree 2 size: " << tree2.size() << endl;
 
     //    cout << endl << endl <<
     //     " ----------------- Linked list -----------------" << endl << endl;
@@ -42,15 +60,8 @@ int main()
     //     " ----------------- Linked list -----------------" << endl << endl;
 
 
-    cout << endl << endl <<
-        " ----------------- Tree iterator -----------------" << endl << endl;
-    for(auto it : tree1) {
-        cout << "this is iterator result: " << endl;
-        cout << "iterator curent node value: " << (it)->fruitID_ << endl;
-        (it)->PrintNode();
-        cout << "---------------------------------------" << endl << endl;
-    }
-
+    //PrintTree(tree1);
+    //PrintTree(tree2);
 
 
     //
@@ -66,9 +77,18 @@ int main()
     //        cout << " -------------- Node ------------------" << endl;
     //    }
 
+ 
+    //tree1.PrintTreeData();
+    tree1.DeleteNode(tree1.findPos(1));
+    PrintTree(tree1);
+    tree1.DeleteNode(tree1.findPos(7));
+    PrintTree(tree1);    
+    tree1.DeleteNode(tree1.findPos(155));
+    PrintTree(tree1);
 
-    
-
+    //Tree& temp = tree1;
+    //cout << "&tree1 = " << &tree1 << endl;
+    //cout << "&temp = " << &temp << endl;
 
     return 0;
 }

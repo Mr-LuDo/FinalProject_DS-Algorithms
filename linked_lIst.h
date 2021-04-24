@@ -7,8 +7,8 @@
 
 class LinkedList {
  public:
-//  class IllegalAccess{};
-//  class Unimplemented{};
+  class IllegalAccess{};
+  class Unimplemented{};
 
   LinkedList() {}
   virtual ~LinkedList() {}
@@ -33,7 +33,7 @@ class LinkedListExtraData : public LinkedList {
 
         virtual ~LinkedListExtraData() override {
             while (size_) {
-                cout << "size of linked list is: " << size_ << endl;
+                //cout << "size of linked list is: " << size_ << endl;
                 PopFront();
             }
         }

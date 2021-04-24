@@ -9,7 +9,7 @@ class Tree;
 
 class Node {
     public:
-        Node(int fruitID) :
+        Node(int fruitID = -1) :
             fruitID_(fruitID), ll_source_(nullptr),
             ll_next_(nullptr), ll_previous_(nullptr), treeID_(-1), tree_(nullptr),
             tree_parent_(nullptr), tree_left_(nullptr), tree_right_(nullptr)
@@ -38,6 +38,7 @@ class Node {
             cout << "tree_parent_ = " << tree_parent_ << endl;
             cout << "tree_left_ = " << tree_left_ << endl;
             cout << "tree_right_ = " << tree_right_ << endl;
+            cout << "-----------------------------" << endl;
         }
 
         int fruitID_;
