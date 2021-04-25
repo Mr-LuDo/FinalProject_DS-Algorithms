@@ -8,6 +8,8 @@
 using namespace std;
 
 
+
+
 class Tree
 {
     public:
@@ -82,7 +84,7 @@ class Tree
                 return;
             }
             if (node->tree_left_ == nullptr || node->tree_right_ == nullptr) {
-                DeleteNodeOnechild(node);
+                DeleteNodeWithOnechild(node);
                 return;
             }
             else {
@@ -90,9 +92,9 @@ class Tree
                 if (node->tree_left_ == nullptr && node->tree_right_ == nullptr)
                     DeleteLeaf(node);
                 else
-                    DeleteNodeOnechild(node);
-                return;
+                    DeleteNodeWithOnechild(node);
             }
+            return;
         }
         
         void SwapNodes(Node& node1, Node& node2) {
@@ -125,7 +127,7 @@ class Tree
             node2.tree_right_->tree_parent_ = &node2;
         }
 
-        void DeleteNodeOnechild(Node* node) {
+        void DeleteNodeWithOnechild(Node* node) {
             Node* parent = node->tree_parent_;
             Node* only_child = (node->tree_left_ ? node->tree_left_ : node->tree_right_);
             only_child->tree_parent_ = parent;
@@ -163,6 +165,13 @@ class Tree
             linkedlist_->PopThis(leaf);
             --tree_size_;
         }
+
+// -------------------------------- AVL ------------------------------------------------------
+
+        void LeftRotation(int nodeid);
+        void LeftRotation(Node* node);
+        void RightRotation(int nodeid);
+        void RightRotation(Node* node);
 
 
 // -------------------------------- iterator ------------------------------------------------------
@@ -267,18 +276,6 @@ class Tree
             return nullptr;
         }
 
-        void Printtreedata() {
-            cout << endl << "-------------" << endl;
-            cout << "tree data: " <<endl;
-            cout << "treeID_ = " << treeID_ << endl;
-            cout << "isEmpty_ = " << isEmpty_ << endl;
-            cout << "linkedlist_ = " << linkedlist_ << endl;
-            cout << "lowest_node_ = " << lowest_node_ <<endl;
-            cout << "highest_node_ = " << highest_node_ << endl;
-            cout << "root_ = " << root_ << endl;
-            cout << "-------------" << endl;
-            }
-
         int size() const {
             return tree_size_;
         }
@@ -288,13 +285,17 @@ class Tree
             cout << "treeID_ = " << treeID_ << endl;
             cout << "isEmpty_ = " << (isEmpty_ == 0 ? "no" : "yes") << endl;
             cout << "tree_size_ = " << tree_size_ << endl;
-            cout << "root_ = " << root_ << endl;
-            cout << "lowest_node_ = " << lowest_node_ << endl;
-            cout << "highest_node_ = " << highest_node_ << endl;
+            cout << "root_->fruitID =          " << root_->fruitID_;
+            cout << "  at address: " << root_ << endl;
+            cout << "lowest_node_->fruitID_ =  " << lowest_node_->fruitID_;
+            cout << "  at address: " << lowest_node_ << endl;
+            cout << "highest_node_->fruitID_ = " << highest_node_->fruitID_;
+            cout << "  at address: " << highest_node_ << endl;
             cout << "----------------------" << endl;
         }
 
         int treeID_;
+
     private:
         bool isEmpty_;
         int tree_size_;
@@ -312,10 +313,126 @@ void PrintTree(Tree& tree) {
         "----------------- Iterator Tree ID = "<< tree.treeID_ << " -----------------" << endl << endl;
     for (auto it : tree) {
         cout << "iterator curent node value: " << (it)->fruitID_ << endl;
-        //(it)->PrintNode();
+        (it)->PrintNode();
         cout << "---------------------------------------" << endl << endl;
     }
 }
 
+
+
+
+
+void Tree::LeftRotation(int nodeid) {
+    LeftRotation(findPos(nodeid));
+}
+void Tree::RightRotation(int nodeid) {
+    RightRotation(findPos(nodeid));
+}
+
+
+#define DOES_NODE_EXIST(node)           ( (node != nullptr) ? true : false )
+#define CHECK_FOR_NULL_PARENT(node)     ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_parent_ ) ? (node)->tree_parent_ : nullptr ) : nullptr )
+#define CHECK_FOR_NULL_LEFT(node)       ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_left_   ) ? (node)->tree_left_   : nullptr ) : nullptr )
+#define CHECK_FOR_NULL_RIGHT(node)      ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_right_  ) ? (node)->tree_right_  : nullptr ) : nullptr )
+
+void Tree::LeftRotation(Node* node) {
+
+    Node* father_node = CHECK_FOR_NULL_PARENT(node);
+    Node* right_node = CHECK_FOR_NULL_RIGHT(node);
+    Node* right_node_lefttson = CHECK_FOR_NULL_LEFT(right_node);
+
+    if (DOES_NODE_EXIST(right_node)) {
+        right_node->tree_parent_ = father_node;
+        if (DOES_NODE_EXIST(father_node)) {
+            if (father_node->tree_left_ == node)
+                node->tree_parent_->tree_left_ = right_node;
+            else
+                node->tree_parent_->tree_right_ = right_node;
+        }
+
+        right_node->tree_left_ = node;
+        node->tree_parent_ = right_node;
+
+        node->tree_right_ = right_node_lefttson;
+        if (DOES_NODE_EXIST(right_node_lefttson))
+            right_node_lefttson->tree_parent_ = node;
+
+        if (node == root_)
+            root_ = right_node;
+    }
+
+
+}
+
+
+void Tree::RightRotation(Node* node) {
+
+    Node* father_node = CHECK_FOR_NULL_PARENT(node);   
+    Node* left_node = CHECK_FOR_NULL_LEFT(node);
+    Node* left_node_rightson = CHECK_FOR_NULL_RIGHT(left_node);
+
+    if (DOES_NODE_EXIST(left_node)) {
+        left_node->tree_parent_ = father_node;
+        if (DOES_NODE_EXIST(father_node)) {
+            if(father_node->tree_left_ == node)
+                node->tree_parent_->tree_left_ = left_node;
+            else
+                node->tree_parent_->tree_right_ = left_node;
+        }
+
+        left_node->tree_right_ = node;
+        node->tree_parent_ = left_node;
+
+        node->tree_left_ = left_node_rightson;
+        if (DOES_NODE_EXIST(left_node_rightson))
+            left_node_rightson->tree_parent_ = node;
+
+        if (root_ = node)
+            root_ = left_node;
+    }
+
+
+}
+
+
+
+/*
+void Tree::LeftRotation(int nodeid) {
+    LeftRotation(*findPos(nodeid));
+}
+
+void Tree::LeftRotation(Node& node) {
+    Node* father = node.tree_parent_;
+    Node* father_son = (father->tree_left_ == &node ? father->tree_left_ : father->tree_right_);
+    Node* right = node.tree_right_;
+    Node* right_leftson = right->tree_left_;
+            
+    right->tree_parent_ = father;
+    father_son = right;
+
+    right->tree_left_ = &node;
+    node.tree_parent_ = right;
+
+    node.tree_right_ = right_leftson;
+    right_leftson->tree_parent_ = &node;
+}       
+        
+void Tree::RightRotation(Node& node) {
+    Node* father = node.tree_parent_;
+    Node* father_son = (father->tree_left_ == &node ? father->tree_left_ : father->tree_right_);
+    Node* left = node.tree_left_;
+    Node* left_righttson = left->tree_right_;
+
+    left->tree_parent_ = father;
+    father_son = left;
+
+    left->tree_right_ = &node;
+    node.tree_parent_ = left;
+
+    node.tree_left_ = left_righttson;
+    left_righttson->tree_parent_ = &node;
+}
+
+*/
 
 #endif // TREE_H
