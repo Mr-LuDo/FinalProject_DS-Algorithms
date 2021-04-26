@@ -33,7 +33,7 @@ int main()
     tree1.AddFruit(52);
 
 
-    tree2.AddFruit(17);
+  /*  tree2.AddFruit(17);
     tree2.AddFruit(71);
     tree2.AddFruit(55);
     tree2.AddFruit(96);
@@ -52,6 +52,7 @@ int main()
     cout << "tree 2 size: " << tree2.size() << endl;
 
     LL1.PrintLinkedList();
+    */
     
  
  /*   tree1.DeleteNode(tree1.findPos(1));
@@ -81,8 +82,19 @@ int main()
     //cout << "&tree1 = " << &tree1 << endl;
     //cout << "&temp = " << &temp << endl;
 
+     
+    //cout << tree1.findPos(11)->fruitID_ << " at address:  " << tree1.findPos(11) << endl;
+    tree1.DeleteNode(11);
+    tree1.DeleteNode(11);
+    tree1.DeleteNode(9);
+    tree1.DeleteNode(1);
+    tree1.DeleteNode(6);
+    PrintTree(tree1);
 
-
+    tree1.PrintTreeData();
+    cout << "linked list size: " << LL1.size() << endl;
+    cout << "tree 1 size: " << tree1.size() << endl;
+    cout << "tree 2 size: " << tree2.size() << endl;
 
 
 

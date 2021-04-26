@@ -79,22 +79,30 @@ class Tree
             }
         }
 
-        void DeleteNode(Node* node) {
+        void DeleteNode(int fruit_id) {
+            Node* node = findPos(fruit_id);
+            if (node->fruitID_ != fruit_id)
+                return;
+
+            Node* parent = node->tree_parent_;
+
             if (node->tree_left_ == nullptr && node->tree_right_ == nullptr) {
                 DeleteLeaf(node);
-                return;
-            }
-            if (node->tree_left_ == nullptr || node->tree_right_ == nullptr) {
-                DeleteNodeWithOnechild(node);
-                return;
             }
             else {
-                SwapNodes(*node, *Next(node));
-                if (node->tree_left_ == nullptr && node->tree_right_ == nullptr)
-                    DeleteLeaf(node);
-                else
+                if (node->tree_left_ == nullptr || node->tree_right_ == nullptr) {
                     DeleteNodeWithOnechild(node);
+                }
+                else {
+                    SwapNodes(*node, *Next(node));
+                    if (node->tree_left_ == nullptr && node->tree_right_ == nullptr)
+                        DeleteLeaf(node);
+                    else
+                        DeleteNodeWithOnechild(node);
+                }
             }
+
+            BalanceTree(parent);
             return;
         }
         
@@ -260,6 +268,8 @@ class Tree
         Node* findPos(int fruitID) {
             Node* tempnode = root_;
             while(tempnode != nullptr) {
+                //cout << tempnode->fruitID_ << " at address:  " << tempnode << endl;
+
                 if(fruitID == tempnode->fruitID_)
                     return tempnode;
                 if(fruitID < tempnode->fruitID_) {
@@ -347,7 +357,7 @@ void Tree::BalanceTree(Node* node) {
                 if (right_balance_factor == RIGHT_HEAVY)
                     LeftRotation(node);
                 else {
-                    RightRotation(node->tree_left_);
+                    RightRotation(node->tree_right_);
                     LeftRotation(node);
                 }
             }
@@ -360,56 +370,12 @@ void Tree::BalanceTree(Node* node) {
     return;
 }
 
-//void Tree::BalanceTree(Node* node) {
-//
-//    do {
-//
-//        UpdateHeightAndBalanceFactor(node);
-//
-//        if (DOES_NODE_EXIST(node) == false)
-//            break;
-//
-//        int height_zero = 0;
-//        int left_height = IF_EXIST_RETURN_VARIABLE(node, tree_left_, height_, height_zero);
-//        int right_height = IF_EXIST_RETURN_VARIABLE(node, tree_right_, height_, height_zero);
-//
-//        node->height_ = 1 + std::max(left_height, right_height);
-//        node->balance_factor_ = left_height - right_height;
-//
-//
-//        if (node->balance_factor_ == UNBALANCED_LEFT || node->balance_factor_ == UNBALANCED_RIGHT) {
-//            int left_balance_factor = IF_EXIST_RETURN_VARIABLE(node, tree_left_, balance_factor_, height_zero);
-//            int right_balance_factor = IF_EXIST_RETURN_VARIABLE(node, tree_right_, balance_factor_, height_zero);
-//
-//            if (node->balance_factor_ == UNBALANCED_LEFT) {
-//                if (left_balance_factor == LEFT_HEAVY)
-//                    RightRotation(node);
-//                else {
-//                    LeftRotation(node->tree_left_);
-//                    RightRotation(node);
-//                }
-//            }
-//            else {
-//                if (right_balance_factor == RIGHT_HEAVY)
-//                    LeftRotation(node);
-//                else {
-//                    RightRotation(node->tree_left_);
-//                    LeftRotation(node);
-//                }
-//            }
-//        }
-//
-//        UpdateHeightAndBalanceFactor(node);
-//        node = node->tree_parent_;
-//    } while (node != nullptr);
-//
-//    return;
-//}
-
 void Tree::UpdateHeightAndBalanceFactor(Node* node) {
 
     if (DOES_NODE_EXIST(node) == false)
         return;
+    if (node->tree_parent_ == nullptr)
+        root_ = node;
 
     int height_zero = 0;
     int left_height = IF_EXIST_RETURN_VARIABLE(node, tree_left_, height_, height_zero);
@@ -420,7 +386,6 @@ void Tree::UpdateHeightAndBalanceFactor(Node* node) {
 
     return;
 }
-
 
 void PrintTree(Tree& tree) {
     tree.PrintTreeData();
