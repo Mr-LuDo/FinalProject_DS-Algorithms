@@ -50,6 +50,7 @@ class Tree
                         highest_node_ = temp_node;
                 }
             }
+            BalanceTree(temp_node);
         }
 
         bool UpdateLeft(Node* fruitNode, Node* newLeft_fruitNode) {
@@ -168,11 +169,12 @@ class Tree
 
 // -------------------------------- AVL ------------------------------------------------------
 
+        void BalanceTree(Node* node);
+        void UpdateHeightAndBalanceFactor(Node* node);
         void LeftRotation(int nodeid);
         void LeftRotation(Node* node);
         void RightRotation(int nodeid);
-        void RightRotation(Node* node);
-
+        void RightRotation(Node* node); 
 
 // -------------------------------- iterator ------------------------------------------------------
         class Iterator {
@@ -307,6 +309,119 @@ class Tree
 };
 
 
+
+#define DOES_NODE_EXIST(node)           ( (node != nullptr) ? true : false )
+#define CHECK_FOR_NULL_PARENT(node)     ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_parent_ ) ? (node)->tree_parent_ : nullptr ) : nullptr )
+#define CHECK_FOR_NULL_LEFT(node)       ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_left_   ) ? (node)->tree_left_   : nullptr ) : nullptr )
+#define CHECK_FOR_NULL_RIGHT(node)      ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_right_  ) ? (node)->tree_right_  : nullptr ) : nullptr )
+
+#define IF_EXIST_RETURN_VARIABLE(node, direction, variable, if_false)  ( DOES_NODE_EXIST(node) ? ( DOES_NODE_EXIST( node->direction ) ? node->direction->variable : if_false ) : if_false )
+#define UNBALANCED_LEFT 2
+#define UNBALANCED_RIGHT -2
+#define LEFT_HEAVY 1
+#define RIGHT_HEAVY -1
+
+void Tree::BalanceTree(Node* node) {
+
+    do {
+        
+        if (DOES_NODE_EXIST(node) == false)
+            return;
+        
+        UpdateHeightAndBalanceFactor(node);
+        
+        int height_zero = 0;
+        if (node->balance_factor_ == UNBALANCED_LEFT || node->balance_factor_ == UNBALANCED_RIGHT) {
+            int left_balance_factor = IF_EXIST_RETURN_VARIABLE(node, tree_left_, balance_factor_, height_zero);
+            int right_balance_factor = IF_EXIST_RETURN_VARIABLE(node, tree_right_, balance_factor_, height_zero);
+
+            if (node->balance_factor_ == UNBALANCED_LEFT) {
+                if (left_balance_factor == LEFT_HEAVY)
+                    RightRotation(node);
+                else {
+                    LeftRotation(node->tree_left_);
+                    RightRotation(node);
+                }
+            }
+            else {
+                if (right_balance_factor == RIGHT_HEAVY)
+                    LeftRotation(node);
+                else {
+                    RightRotation(node->tree_left_);
+                    LeftRotation(node);
+                }
+            }
+        }
+
+        UpdateHeightAndBalanceFactor(node);
+        node = node->tree_parent_;
+    } while (node != nullptr);
+
+    return;
+}
+
+//void Tree::BalanceTree(Node* node) {
+//
+//    do {
+//
+//        UpdateHeightAndBalanceFactor(node);
+//
+//        if (DOES_NODE_EXIST(node) == false)
+//            break;
+//
+//        int height_zero = 0;
+//        int left_height = IF_EXIST_RETURN_VARIABLE(node, tree_left_, height_, height_zero);
+//        int right_height = IF_EXIST_RETURN_VARIABLE(node, tree_right_, height_, height_zero);
+//
+//        node->height_ = 1 + std::max(left_height, right_height);
+//        node->balance_factor_ = left_height - right_height;
+//
+//
+//        if (node->balance_factor_ == UNBALANCED_LEFT || node->balance_factor_ == UNBALANCED_RIGHT) {
+//            int left_balance_factor = IF_EXIST_RETURN_VARIABLE(node, tree_left_, balance_factor_, height_zero);
+//            int right_balance_factor = IF_EXIST_RETURN_VARIABLE(node, tree_right_, balance_factor_, height_zero);
+//
+//            if (node->balance_factor_ == UNBALANCED_LEFT) {
+//                if (left_balance_factor == LEFT_HEAVY)
+//                    RightRotation(node);
+//                else {
+//                    LeftRotation(node->tree_left_);
+//                    RightRotation(node);
+//                }
+//            }
+//            else {
+//                if (right_balance_factor == RIGHT_HEAVY)
+//                    LeftRotation(node);
+//                else {
+//                    RightRotation(node->tree_left_);
+//                    LeftRotation(node);
+//                }
+//            }
+//        }
+//
+//        UpdateHeightAndBalanceFactor(node);
+//        node = node->tree_parent_;
+//    } while (node != nullptr);
+//
+//    return;
+//}
+
+void Tree::UpdateHeightAndBalanceFactor(Node* node) {
+
+    if (DOES_NODE_EXIST(node) == false)
+        return;
+
+    int height_zero = 0;
+    int left_height = IF_EXIST_RETURN_VARIABLE(node, tree_left_, height_, height_zero);
+    int right_height = IF_EXIST_RETURN_VARIABLE(node, tree_right_, height_, height_zero);
+
+    node->height_ = 1 + std::max(left_height, right_height);
+    node->balance_factor_ = left_height - right_height;
+
+    return;
+}
+
+
 void PrintTree(Tree& tree) {
     tree.PrintTreeData();
     cout << endl << endl <<
@@ -318,22 +433,12 @@ void PrintTree(Tree& tree) {
     }
 }
 
-
-
-
-
 void Tree::LeftRotation(int nodeid) {
     LeftRotation(findPos(nodeid));
 }
 void Tree::RightRotation(int nodeid) {
     RightRotation(findPos(nodeid));
 }
-
-
-#define DOES_NODE_EXIST(node)           ( (node != nullptr) ? true : false )
-#define CHECK_FOR_NULL_PARENT(node)     ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_parent_ ) ? (node)->tree_parent_ : nullptr ) : nullptr )
-#define CHECK_FOR_NULL_LEFT(node)       ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_left_   ) ? (node)->tree_left_   : nullptr ) : nullptr )
-#define CHECK_FOR_NULL_RIGHT(node)      ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_right_  ) ? (node)->tree_right_  : nullptr ) : nullptr )
 
 void Tree::LeftRotation(Node* node) {
 
@@ -360,10 +465,7 @@ void Tree::LeftRotation(Node* node) {
         if (node == root_)
             root_ = right_node;
     }
-
-
 }
-
 
 void Tree::RightRotation(Node* node) {
 
@@ -390,49 +492,15 @@ void Tree::RightRotation(Node* node) {
         if (root_ = node)
             root_ = left_node;
     }
-
-
 }
 
 
 
-/*
-void Tree::LeftRotation(int nodeid) {
-    LeftRotation(*findPos(nodeid));
-}
 
-void Tree::LeftRotation(Node& node) {
-    Node* father = node.tree_parent_;
-    Node* father_son = (father->tree_left_ == &node ? father->tree_left_ : father->tree_right_);
-    Node* right = node.tree_right_;
-    Node* right_leftson = right->tree_left_;
-            
-    right->tree_parent_ = father;
-    father_son = right;
 
-    right->tree_left_ = &node;
-    node.tree_parent_ = right;
 
-    node.tree_right_ = right_leftson;
-    right_leftson->tree_parent_ = &node;
-}       
-        
-void Tree::RightRotation(Node& node) {
-    Node* father = node.tree_parent_;
-    Node* father_son = (father->tree_left_ == &node ? father->tree_left_ : father->tree_right_);
-    Node* left = node.tree_left_;
-    Node* left_righttson = left->tree_right_;
 
-    left->tree_parent_ = father;
-    father_son = left;
 
-    left->tree_right_ = &node;
-    node.tree_parent_ = left;
 
-    node.tree_left_ = left_righttson;
-    left_righttson->tree_parent_ = &node;
-}
-
-*/
 
 #endif // TREE_H

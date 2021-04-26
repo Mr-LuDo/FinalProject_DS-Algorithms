@@ -63,15 +63,18 @@ int main()
 */
 
     PrintTree(tree1);
-    tree1.LeftRotation(7);
-    //tree1.LeftRotation(155);
-    //tree1.RightRotation(155);
-    //tree1.RightRotation(91);
-    //tree1.RightRotation(15);
-    tree1.LeftRotation(91);
-    //tree1.RightRotation(11);
 
-    PrintTree(tree1);
+
+
+    //tree1.LeftRotation(7);
+    ////tree1.LeftRotation(155);
+    ////tree1.RightRotation(155);
+    ////tree1.RightRotation(91);
+    ////tree1.RightRotation(15);
+    //tree1.LeftRotation(91);
+    ////tree1.RightRotation(11);
+
+    //PrintTree(tree1);
 
 
     //Tree& temp = tree1;

@@ -16,7 +16,8 @@ class Node {
         Node(int fruitID = -1) :
             linkedlist_(nullptr), ll_next_(nullptr), ll_previous_(nullptr),
             treeID_(-1), fruitID_(fruitID), tree_(nullptr),
-            tree_parent_(nullptr), tree_left_(nullptr), tree_right_(nullptr)
+            tree_parent_(nullptr), tree_left_(nullptr), tree_right_(nullptr),
+            height_(0), balance_factor_(0)
             {}
 
         ~Node() = default;
@@ -47,6 +48,12 @@ class Node {
             cout << "tree_right_->fruitID_  = " << CHECK_FOR_NULL_PTR(tree_right_);
             cout << "  at address: " << tree_right_ << endl;
             cout << "-----------------------------" << endl;
+            cout << "height_         = " << height_ << endl;
+            cout << "balance_factor_ = " << balance_factor_ << endl;
+
+
+
+
         }
 
     // linked list 
@@ -62,6 +69,10 @@ class Node {
         Node* tree_parent_;
         Node* tree_left_;
         Node* tree_right_;
+        
+    //  AVL
+        int height_;
+        int balance_factor_;
 };
 
 #endif // NODE_H
