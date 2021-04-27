@@ -7,18 +7,18 @@
 
 class LinkedList {
  public:
-//  class IllegalAccess{};
-//  class Unimplemented{};
+  class IllegalAccess{};
+  class Unimplemented{};
 
   LinkedList() {}
   virtual ~LinkedList() {}
 
   virtual void PushFront(const int& data) = 0;
   virtual void PushBack(const int& data) = 0;
-  virtual const int& Back() const = 0;
-  virtual const int& Front() const = 0;
-  virtual const void PopBack() = 0;
-  virtual const void PopFront() = 0;
+  virtual const Node* Back() const = 0;
+  virtual const Node* Front() const = 0;
+  virtual void PopBack() = 0;
+  virtual void PopFront() = 0;
   virtual size_t size() const = 0;
   bool IsEmpty() const { return size() == 0; }
 };
@@ -30,26 +30,33 @@ class LinkedListExtraData : public LinkedList {
     public:
         LinkedListExtraData()
             : first_node_(nullptr), last_node_(nullptr), size_(0) {}
-        virtual ~LinkedListExtraData() override {}
 
-        bool PushFrontfruit(const int& fruitID, int treeID) {
+        virtual ~LinkedListExtraData() override {
+            while (size_) {
+                //cout << "size of linked list is: " << size_ << endl;
+                PopFront();
+            }
+        }
+
+        bool PushFrontfruit(const int& fruitID, int treeID, Tree* tree) {
             if(Search(fruitID) != nullptr) {
                 cout << "fruit already exist, no action were taken." << endl;
                 return false;
             }
             PushFront(fruitID);
             first_node_->treeID_ = treeID;
+            first_node_->tree_ = tree;
             return true;
         }
 
         Node* Search(int fruitID) {
-            if(size_ == 0) return nullptr;
+            if(size_ == 0) 
+                return nullptr;
+
             Node* temp_node = first_node_;
             do {
-//                cout << "searching, temp node = " << temp_node << " fisrt node = " << first_node_ << endl;
                 if(temp_node->fruitID_ == fruitID)
                     return temp_node;
-//                cout << "next" << endl;
                 Node* tmp = Next(temp_node);
                 if(tmp == nullptr)
                     return nullptr;
@@ -62,37 +69,47 @@ class LinkedListExtraData : public LinkedList {
         void PushFront(const int& fruitID) {
             auto new_node = new(Node)(fruitID);
             new_node->ll_source_ = this;
-            new_node->ll_next_ = first_node_;
-            new_node->ll_previous_ = last_node_;
 
-            if(!size_) last_node_ = new_node;
+            if (size_ == 0) {
+                new_node->ll_next_ = new_node;
+                new_node->ll_previous_ = new_node;
+                last_node_ = new_node;
+                first_node_ = new_node;
+            }
             else {
+                new_node->ll_next_ = first_node_;
+                new_node->ll_previous_ = last_node_;
                 first_node_->ll_previous_ = new_node;
                 last_node_->ll_next_ = new_node;
+                first_node_ = new_node;
             }
-
-            first_node_ = new_node;
             ++size_;
         }
 
         void PushBack(const int& fruitID) {
             auto new_node = new(Node)(fruitID);
             new_node->ll_source_ = this;
-            new_node->ll_next_ = first_node_;
-            new_node->ll_previous_ = last_node_;
 
-            if(!size_) first_node_ = new_node;
-            else {
-                last_node_->ll_next_ = new_node;
-                first_node_->ll_previous_ = new_node;
+            if (size_ == 0) {
+                new_node->ll_next_ = new_node;
+                new_node->ll_previous_ = new_node;
+                last_node_ = new_node;
+                first_node_ = new_node;
             }
-
-            last_node_ = new_node;
+            else {
+                new_node->ll_next_ = first_node_;
+                new_node->ll_previous_ = last_node_;
+                first_node_->ll_previous_ = new_node;
+                last_node_->ll_next_ = new_node;
+                last_node_ = new_node;
+            }
             ++size_;
         }
 
         void PushAfterThis(Node* node, int fruitID) {
-            if(node->ll_source_ != this) return;
+            if(node->ll_source_ != this) 
+                return;
+            
             auto new_node = new(Node)(fruitID);
             new_node->ll_source_ = this;
 
@@ -101,35 +118,35 @@ class LinkedListExtraData : public LinkedList {
 
             new_node->ll_previous_ = node;
             new_node->ll_next_->ll_previous_ = new_node;
+            
             ++size_;
-
-            return;
         }
 
-        const int& Front() const    { return first_node_->fruitID_; }
-        const int& Back()  const    { return last_node_->fruitID_; }
-        const void PopBack() {}         // not really needed for now
-        const void PopFront() {}        // not really needed for now
 
-        const void PopThis(Node* node) {
-            if(node->ll_source_ != this) return;
+        void PopBack()  { PopThis(last_node_); }
+        void PopFront() { PopThis(first_node_); }
+
+        void PopThis(Node* node) {
+            if(node->ll_source_ != this)
+                return;
+            if (node == first_node_)
+                first_node_ = Next(node);
+            if (node == last_node_)
+                last_node_ = Previous(node);
+
             node->ll_next_->ll_previous_ = node->ll_previous_;
             node->ll_previous_->ll_next_ = node->ll_next_;
             delete node;
             --size_;
-            return;
         }
 
-        Node* Next(Node* node) {
-            return node->ll_next_;
-        }
-        Node* Previous(Node* node) {
-            return node->ll_previous_;
-        }
+        Node* Next(Node* node)      { return node->ll_next_;     }
+        Node* Previous(Node* node)  { return node->ll_previous_; }
+        Node* Front() const { return first_node_; }
+        Node* Back()  const { return last_node_;  }
+        size_t size() const { return size_;       }
 
-        size_t size() const { return size_; }
-
-//    private:
+    private:
         Node* first_node_;
         Node* last_node_;
         size_t size_;
