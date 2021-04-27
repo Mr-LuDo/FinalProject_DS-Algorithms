@@ -33,7 +33,9 @@ int main()
     tree1.AddFruit(52);
 
 
-    tree2.AddFruit(17);
+  /*  tree2.AddFruit(17);
+
+
     tree2.AddFruit(71);
     tree2.AddFruit(55);
     tree2.AddFruit(96);
@@ -46,134 +48,67 @@ int main()
     tree2.AddFruit(67);
     tree2.AddFruit(8);
 
-    tree1.Printtreedata();
+    tree1.PrintTreeData();
+
     cout << "linked list size: " << LL1.size() << endl;
     cout << "tree 1 size: " << tree1.size() << endl;
     cout << "tree 2 size: " << tree2.size() << endl;
 
-    //    cout << endl << endl <<
-    //     " ----------------- Linked list -----------------" << endl << endl;
-    //
-    //    cout << "LL size is: " << LL1.size() << endl;
-    //    cout << "this is LL1 first: " << LL1.first_node_ << endl;
-    //    cout << "this is LL1 last: " << LL1.last_node_ << endl << endl <<
-    //     " ----------------- Linked list -----------------" << endl << endl;
-
-
-    //PrintTree(tree1);
-    //PrintTree(tree2);
-
-
-    //
-    //    Node* temp_node;
-    //    temp_node = LL1.first_node_;
-    //    for(auto i = 0; i < LL1.size(); ++i) {
-    //        cout << "this is node fruitID: " << temp_node->fruitID_ << endl;
-    //        cout << "this is node ll_source_: " << temp_node->ll_source_ << endl;
-    //        cout << "this is node ll_next_: " << temp_node->ll_next_ << endl;
-    //        cout << "this is node ll_previous_: " << temp_node->ll_previous_ << endl;
-    //
-    //        temp_node = temp_node->ll_next_;
-    //        cout << " -------------- Node ------------------" << endl;
-    //    }
-
+    LL1.PrintLinkedList();
+    */
+    
  
-    //tree1.PrintTreeData();
-    tree1.DeleteNode(tree1.findPos(1));
+ /*   tree1.DeleteNode(tree1.findPos(1));
+
+
     PrintTree(tree1);
     tree1.DeleteNode(tree1.findPos(7));
     PrintTree(tree1);    
     tree1.DeleteNode(tree1.findPos(155));
     PrintTree(tree1);
+*/
+
+    PrintTree(tree1);
+
+
+
+    //tree1.LeftRotation(7);
+    ////tree1.LeftRotation(155);
+    ////tree1.RightRotation(155);
+    ////tree1.RightRotation(91);
+    ////tree1.RightRotation(15);
+    //tree1.LeftRotation(91);
+    ////tree1.RightRotation(11);
+
+    //PrintTree(tree1);
+
+
 
     //Tree& temp = tree1;
     //cout << "&tree1 = " << &tree1 << endl;
     //cout << "&temp = " << &temp << endl;
 
+     
+    //cout << tree1.findPos(11)->fruitID_ << " at address:  " << tree1.findPos(11) << endl;
+    tree1.DeleteNode(11);
+    tree1.DeleteNode(11);
+    tree1.DeleteNode(9);
+    tree1.DeleteNode(1);
+    tree1.DeleteNode(6);
+    PrintTree(tree1);
+
+    tree1.PrintTreeData();
+    cout << "linked list size: " << LL1.size() << endl;
+    cout << "tree 1 size: " << tree1.size() << endl;
+    cout << "tree 2 size: " << tree2.size() << endl;
+
+
+
+
     return 0;
 }
 
 
-/*
-int main()
-{
-    LinkedListExtraData<int> LL1;
-    LL1.PushFront(1);
-    LL1.PushFront(2);
-    LL1.PushFront(3);
-    LL1.PushFront(4);
-    LL1.PushFront(5);
-    LL1.PushFront(6);
-
-    LL1.PushBack(-1);
-    LL1.PushBack(-2);
-    LL1.PushBack(-3);
-    LL1.PushBack(-4);
-    LL1.PushBack(-5);
-    LL1.PushBack(-6);
-
-
-    cout << "LL size is: " << LL1.size() << endl;
-    cout << "this is LL1 first: " << LL1.first_node_ << endl;
-    cout << "this is LL1 last: " << LL1.last_node_ << endl << endl <<
-     " ----------------- Linked list -----------------" << endl << endl;
-
-    Node* temp_node;
-    temp_node = LL1.first_node_;
-    for(auto i = 0; i < LL1.size(); ++i) {
-        cout << "this is node fruitID: " << temp_node->fruitID_ << endl;
-        cout << "this is node source: " << temp_node->source_ << endl;
-        cout << "this is node next: " << temp_node->next_ << endl;
-        cout << "this is node previous: " << temp_node->previous_ << endl;
-
-        temp_node = temp_node->next_;
-        cout << " -------------- Node ------------------" << endl;
-
-        if(i == 5) temp_node->source_->PopThis(temp_node->previous_);
-        if(i == 8) temp_node->source_->PushAfterThis(temp_node, 50);
-
-    }
-
-    cout << "LL size is: " << LL1.size() << endl;
-    cout << "this is LL1 first: " << LL1.first_node_ << endl;
-    cout << "this is LL1 last: " << LL1.last_node_ << endl << endl <<
-     " ----------------- Linked list -----------------" << endl << endl;
-//    Node* temp_node;
-    temp_node = LL1.first_node_;
-    for(auto i = 0; i < LL1.size(); ++i) {
-        cout << "this is node fruitID: " << temp_node->fruitID_ << endl;
-        cout << "this is node source: " << temp_node->source_ << endl;
-        cout << "this is node next: " << temp_node->next_ << endl;
-        cout << "this is node previous: " << temp_node->previous_ << endl;
-
-        temp_node = temp_node->next_;
-        cout << " -------------- Node ------------------" << endl;
-
-
-    }
-
-
-
-    cout << "LL size is: " << LL1.size() << endl;
-    cout << "this is LL1 first: " << LL1.first_node_ << endl;
-    cout << "this is LL1 last: " << LL1.last_node_ << endl << endl <<
-     " ----------------- Linked list -----------------" << endl << endl;
-//    Node* temp_node;
-    temp_node = LL1.last_node_;
-    for(auto i = 0; i < LL1.size(); ++i) {
-        cout << "this is node fruitID: " << temp_node->fruitID_ << endl;
-        cout << "this is node source: " << temp_node->source_ << endl;
-        cout << "this is node next: " << temp_node->next_ << endl;
-        cout << "this is node previous: " << temp_node->previous_ << endl;
-
-        temp_node = temp_node->previous_;
-        cout << " -------------- Node ------------------" << endl;
-
-
-    }
-    return 0;
-}
-*/
 
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

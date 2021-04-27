@@ -68,7 +68,8 @@ class LinkedListExtraData : public LinkedList {
 
         void PushFront(const int& fruitID) {
             auto new_node = new(Node)(fruitID);
-            new_node->ll_source_ = this;
+            new_node->linkedlist_ = this;
+
 
             if (size_ == 0) {
                 new_node->ll_next_ = new_node;
@@ -88,7 +89,9 @@ class LinkedListExtraData : public LinkedList {
 
         void PushBack(const int& fruitID) {
             auto new_node = new(Node)(fruitID);
-            new_node->ll_source_ = this;
+            new_node->linkedlist_ = this;
+
+
 
             if (size_ == 0) {
                 new_node->ll_next_ = new_node;
@@ -107,11 +110,13 @@ class LinkedListExtraData : public LinkedList {
         }
 
         void PushAfterThis(Node* node, int fruitID) {
-            if(node->ll_source_ != this) 
+            if(node->linkedlist_ != this) 
+
+
                 return;
             
             auto new_node = new(Node)(fruitID);
-            new_node->ll_source_ = this;
+            new_node->linkedlist_ = this;
 
             new_node->ll_next_ = node->ll_next_;
             node->ll_next_ = new_node;
@@ -127,7 +132,9 @@ class LinkedListExtraData : public LinkedList {
         void PopFront() { PopThis(first_node_); }
 
         void PopThis(Node* node) {
-            if(node->ll_source_ != this)
+            if(node->linkedlist_ != this)
+
+
                 return;
             if (node == first_node_)
                 first_node_ = Next(node);
@@ -146,6 +153,22 @@ class LinkedListExtraData : public LinkedList {
         Node* Back()  const { return last_node_;  }
         size_t size() const { return size_;       }
 
+        void PrintLinkedList() {
+            cout << endl << endl <<
+                " ----------------- Linked list ----"
+                "-------------" << endl << endl;
+
+            for (auto i = first_node_; i != last_node_; i = Next(i)) {
+                cout << "fruitID_  = " << i->fruitID_;
+                cout << "  at address: " << i << endl;
+            }
+                cout << "fruitID_  = " << last_node_->fruitID_;
+                cout << "  at address: " << last_node_ << endl;
+        }
+
+
+
+
     private:
         Node* first_node_;
         Node* last_node_;
@@ -154,63 +177,7 @@ class LinkedListExtraData : public LinkedList {
 
 
 
-
-//
-//// ---------------------------------- LinkedListExtraData ---------------------------------------------------
-//template <typename Type>
-//class LinkedListExtraData;
-//
-//class Node {
-//    public:
-//        Node(int data) :
-//             data_(data), source_(nullptr),/* first_(nullptr), last_(nullptr),*/
-//             next_(nullptr), previous_(nullptr)
-//             {}
-//
-//
-//        int data_;
-//        LinkedListExtraData<int>* source_;
-////        std::unique_ptr<Node> first_ ;
-////        std::unique_ptr<Node> last_;
-//        std::unique_ptr<Node> next_;
-//        std::unique_ptr<Node> previous_;
-//
-//};
-//
-//
-//template <typename Type>
-//class LinkedListExtraData : public LinkedList<Type> {
-//    public:
-//        LinkedListExtraData() : first_node_(nullptr), last_node_(nullptr), size_(0) {}
-//        virtual ~LinkedListExtraData() override {}
-//
-//        void PushFront(const Type& data) {
-//            auto new_node = std::make_unique<Node>(data);
-//            new_node->source_ = this;
-//            new_node->next_ = std::move(first_node_);
-//            first_node_ = std::move(new_node);
-//            ++size_;
-//        }
-//
-//        void PushBack(const Type& data) {}
-//        const Type& Back() const {}
-//        const Type& Front() const {}
-//        const void PopBack() {}
-//        const void PopFront() {}
-//        size_t size() const { return size_; }
-//
-////    private:
-//        std::unique_ptr<Node> first_node_;
-//        std::unique_ptr<Node> last_node_;
-//        size_t size_;
-//};
-//
-//
-//
-
-
 // ---------------------------------- UnidirectionalLinkedList ---------------------------------------------------
-
 
 /*
 
