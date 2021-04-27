@@ -15,8 +15,8 @@ class Node {
     public:
         Node(int fruitID = -1) :
             linkedlist_(nullptr), ll_next_(nullptr), ll_previous_(nullptr),
-            treeID_(-1), fruitID_(fruitID), tree_(nullptr),
-            tree_parent_(nullptr), tree_left_(nullptr), tree_right_(nullptr),
+            key_(0), treeID_(-1), fruitID_(fruitID), ripeRate_(0),
+            tree_(nullptr), tree_parent_(nullptr), tree_left_(nullptr), tree_right_(nullptr),
             height_(0), balance_factor_(0)
             {}
 
@@ -61,8 +61,10 @@ class Node {
         Node* ll_next_;
         Node* ll_previous_;
 
+        int key_;
         int treeID_;
         int fruitID_;
+        int ripeRate_;
 
      // binary search tree
         Tree* tree_;

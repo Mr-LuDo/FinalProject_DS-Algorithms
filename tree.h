@@ -15,7 +15,8 @@ class Tree
     public:
         Tree(int treeID, LinkedListExtraData* LL) :
             treeID_(treeID), isEmpty_(true), tree_size_(0), linkedlist_(LL),
-            root_(nullptr), lowest_node_(nullptr), highest_node_(nullptr)
+            root_(nullptr), lowest_node_(nullptr), highest_node_(nullptr),
+            best_fruit_(nullptr), lowest_ripe_rate_(0), highest_ripe_rate_(0)
         {}
 
         virtual ~Tree() = default;
@@ -316,6 +317,10 @@ class Tree
         Node* root_;
         Node* lowest_node_;
         Node* highest_node_;
+
+        int lowest_ripe_rate_;
+        int highest_ripe_rate_;
+        Node* best_fruit_;
 };
 
 
