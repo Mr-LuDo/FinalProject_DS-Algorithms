@@ -10,6 +10,7 @@ using namespace std;
 
 
 
+
 class Tree
 {
     public:
@@ -104,6 +105,7 @@ class Tree
 
             BalanceTree(parent);
             return;
+
         }
         
         void SwapNodes(Node& node1, Node& node2) {
@@ -137,6 +139,8 @@ class Tree
         }
 
         void DeleteNodeWithOnechild(Node* node) {
+
+
             Node* parent = node->tree_parent_;
             Node* only_child = (node->tree_left_ ? node->tree_left_ : node->tree_right_);
             only_child->tree_parent_ = parent;
@@ -183,6 +187,8 @@ class Tree
         void LeftRotation(Node* node);
         void RightRotation(int nodeid);
         void RightRotation(Node* node); 
+
+
 
 // -------------------------------- iterator ------------------------------------------------------
         class Iterator {
@@ -288,6 +294,8 @@ class Tree
             return nullptr;
         }
 
+
+
         int size() const {
             return tree_size_;
         }
@@ -303,10 +311,14 @@ class Tree
             cout << "  at address: " << lowest_node_ << endl;
             cout << "highest_node_->fruitID_ = " << highest_node_->fruitID_;
             cout << "  at address: " << highest_node_ << endl;
+
+
             cout << "----------------------" << endl;
         }
 
         int treeID_;
+
+
 
     private:
         bool isEmpty_;
@@ -386,6 +398,8 @@ void Tree::UpdateHeightAndBalanceFactor(Node* node) {
     return;
 }
 
+
+
 void PrintTree(Tree& tree) {
     tree.PrintTreeData();
     cout << endl << endl <<
@@ -393,6 +407,9 @@ void PrintTree(Tree& tree) {
     for (auto it : tree) {
         cout << "iterator curent node value: " << (it)->fruitID_ << endl;
         (it)->PrintNode();
+
+        //(it)->PrintNode();
+
         cout << "---------------------------------------" << endl << endl;
     }
 }
@@ -457,6 +474,8 @@ void Tree::RightRotation(Node* node) {
             root_ = left_node;
     }
 }
+
+
 
 
 

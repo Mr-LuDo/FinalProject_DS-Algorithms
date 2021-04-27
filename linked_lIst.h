@@ -70,6 +70,7 @@ class LinkedListExtraData : public LinkedList {
             auto new_node = new(Node)(fruitID);
             new_node->linkedlist_ = this;
 
+
             if (size_ == 0) {
                 new_node->ll_next_ = new_node;
                 new_node->ll_previous_ = new_node;
@@ -90,6 +91,8 @@ class LinkedListExtraData : public LinkedList {
             auto new_node = new(Node)(fruitID);
             new_node->linkedlist_ = this;
 
+
+
             if (size_ == 0) {
                 new_node->ll_next_ = new_node;
                 new_node->ll_previous_ = new_node;
@@ -108,6 +111,8 @@ class LinkedListExtraData : public LinkedList {
 
         void PushAfterThis(Node* node, int fruitID) {
             if(node->linkedlist_ != this) 
+
+
                 return;
             
             auto new_node = new(Node)(fruitID);
@@ -128,6 +133,8 @@ class LinkedListExtraData : public LinkedList {
 
         void PopThis(Node* node) {
             if(node->linkedlist_ != this)
+
+
                 return;
             if (node == first_node_)
                 first_node_ = Next(node);
@@ -158,6 +165,8 @@ class LinkedListExtraData : public LinkedList {
                 cout << "fruitID_  = " << last_node_->fruitID_;
                 cout << "  at address: " << last_node_ << endl;
         }
+
+
 
 
     private:
