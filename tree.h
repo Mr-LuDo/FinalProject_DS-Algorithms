@@ -175,7 +175,7 @@ class Tree
             --tree_size_;
         }
 
-// -------------------------------- AVL ------------------------------------------------------
+// ---------------------------------- AVL ---------------------------------------------------------
 
         void BalanceTree(Node* node);
         void UpdateHeightAndBalanceFactor(Node* node);
@@ -216,7 +216,7 @@ class Tree
                 Tree* tree_;
                 Node* currentNode_;
         };
-// ------------------------------- iterator -------------------------------------------------------
+// -------------------------------- -------- ------------------------------------------------------
         Iterator begin() {
             return Iterator(this, lowest_node_);
         }
@@ -334,7 +334,6 @@ class Tree
 void Tree::BalanceTree(Node* node) {
 
     do {
-        
         if (DOES_NODE_EXIST(node) == false)
             return;
         
