@@ -18,8 +18,6 @@ class Node {
             treeID_(-1), fruitID_(fruitID), tree_(nullptr),
             tree_parent_(nullptr), tree_left_(nullptr), tree_right_(nullptr),
             height_(0), balance_factor_(0)
-
-
             {}
 
         ~Node() = default;
@@ -56,8 +54,6 @@ class Node {
 
 
 
-
-
         }
 
     // linked list 
@@ -77,8 +73,6 @@ class Node {
     //  AVL
         int height_;
         int balance_factor_;
-
-
 };
 
 #endif // NODE_H
