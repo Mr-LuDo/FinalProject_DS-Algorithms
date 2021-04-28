@@ -16,13 +16,13 @@ class Tree
         Tree(int treeID, LinkedListExtraData* LL) :
             treeID_(treeID), isEmpty_(true), tree_size_(0), linkedlist_(LL),
             root_(nullptr), lowest_node_(nullptr), highest_node_(nullptr),
-            best_fruit_(nullptr), lowest_ripe_rate_(0), highest_ripe_rate_(0)
+            best_key_(nullptr), lowest_ripe_rate_(0), highest_ripe_rate_(0)
         {}
 
         virtual ~Tree() = default;
 
-        void AddFruit(int fruitID) {
-            if(linkedlist_->PushFrontfruit(fruitID, treeID_, this) == false)
+        void AddNode(int key) {
+            if(linkedlist_->PushFront(key, treeID_, this) == false)
                 return;
 
             Node* temp_node = linkedlist_->Front();
@@ -35,30 +35,30 @@ class Tree
                 highest_node_ = temp_node;
             }
             else {
-                Node* pos = findPos(fruitID);
+                Node* pos = findPos(key);
                 if(pos == temp_node) {
-                    cout << "fruit already exist" << endl;
+                    cout << "key already exist" << endl;
                     return;
                 }
-                if(fruitID < pos->fruitID_) {
+                if(key < pos->key_) {
                     if(UpdateLeft(pos, temp_node)) ++tree_size_;
-                    if(fruitID < lowest_node_->fruitID_)
+                    if(key < lowest_node_->key_)
                         lowest_node_ = temp_node;
                 }
                 else {
                     if(UpdateRight(pos, temp_node)) ++tree_size_;
-                    if(fruitID > highest_node_->fruitID_)
+                    if(key > highest_node_->key_)
                         highest_node_ = temp_node;
                 }
             }
             BalanceTree(temp_node);
         }
 
-        bool UpdateLeft(Node* fruitNode, Node* newLeft_fruitNode) {
-            if(fruitNode->tree_left_ == nullptr) {
-                fruitNode->tree_= this;
-                fruitNode->tree_left_ = newLeft_fruitNode;
-                newLeft_fruitNode->tree_parent_ = fruitNode;
+        bool UpdateLeft(Node* node, Node* newLeft_node) {
+            if(node->left_tree_ == nullptr) {
+                node->tree_= this;
+                node->left_tree_ = newLeft_node;
+                newLeft_node->parent_tree_ = node;
                 return true;
             }
             else {
@@ -67,11 +67,11 @@ class Tree
             }
         }
 
-        bool UpdateRight(Node* fruitNode, Node* newRight_fruitNode) {
-            if(fruitNode->tree_right_ == nullptr) {
-                fruitNode->tree_= this;
-                fruitNode->tree_right_ = newRight_fruitNode;
-                newRight_fruitNode->tree_parent_ = fruitNode;
+        bool UpdateRight(Node* node, Node* newRight_node) {
+            if(node->right_tree_ == nullptr) {
+                node->tree_= this;
+                node->right_tree_ = newRight_node;
+                newRight_node->parent_tree_ = node;
                 return true;
             }
             else {
@@ -80,23 +80,23 @@ class Tree
             }
         }
 
-        void DeleteNode(int fruit_id) {
-            Node* node = findPos(fruit_id);
-            if (node->fruitID_ != fruit_id)
+        void DeleteNode(int key) {
+            Node* node = findPos(key);
+            if (node->key_ != key)
                 return;
 
-            Node* parent = node->tree_parent_;
+            Node* parent = node->parent_tree_;
 
-            if (node->tree_left_ == nullptr && node->tree_right_ == nullptr) {
+            if (node->left_tree_ == nullptr && node->right_tree_ == nullptr) {
                 DeleteLeaf(node);
             }
             else {
-                if (node->tree_left_ == nullptr || node->tree_right_ == nullptr) {
+                if (node->left_tree_ == nullptr || node->right_tree_ == nullptr) {
                     DeleteNodeWithOnechild(node);
                 }
                 else {
                     SwapNodes(*node, *Next(node));
-                    if (node->tree_left_ == nullptr && node->tree_right_ == nullptr)
+                    if (node->left_tree_ == nullptr && node->right_tree_ == nullptr)
                         DeleteLeaf(node);
                     else
                         DeleteNodeWithOnechild(node);
@@ -114,33 +114,33 @@ class Tree
                 highest_node_ = Previous(&node2);
 
             Node temp = node1;
-            if (node1.tree_right_ == &node2) {
-                node1.tree_parent_ = &node2;
-                node1.tree_left_ = node2.tree_left_;
-                node1.tree_right_ = node2.tree_right_;
+            if (node1.right_tree_ == &node2) {
+                node1.parent_tree_ = &node2;
+                node1.left_tree_ = node2.left_tree_;
+                node1.right_tree_ = node2.right_tree_;
 
-                node2.tree_parent_ = temp.tree_parent_;
-                node2.tree_left_ = temp.tree_left_;
-                node2.tree_right_ = &node1;
+                node2.parent_tree_ = temp.parent_tree_;
+                node2.left_tree_ = temp.left_tree_;
+                node2.right_tree_ = &node1;
             }
             else {
-                node1.tree_parent_ = node2.tree_parent_;
-                node1.tree_left_ = node2.tree_left_;
-                node1.tree_right_ = node2.tree_right_;
+                node1.parent_tree_ = node2.parent_tree_;
+                node1.left_tree_ = node2.left_tree_;
+                node1.right_tree_ = node2.right_tree_;
 
-                node2.tree_parent_ = temp.tree_parent_;
-                node2.tree_left_ = temp.tree_left_;
-                node2.tree_right_ = temp.tree_right_;
+                node2.parent_tree_ = temp.parent_tree_;
+                node2.left_tree_ = temp.left_tree_;
+                node2.right_tree_ = temp.right_tree_;
             }
 
-            node2.tree_left_->tree_parent_ = &node2;
-            node2.tree_right_->tree_parent_ = &node2;
+            node2.left_tree_->parent_tree_ = &node2;
+            node2.right_tree_->parent_tree_ = &node2;
         }
 
         void DeleteNodeWithOnechild(Node* node) {
-            Node* parent = node->tree_parent_;
-            Node* only_child = (node->tree_left_ ? node->tree_left_ : node->tree_right_);
-            only_child->tree_parent_ = parent;
+            Node* parent = node->parent_tree_;
+            Node* only_child = (node->left_tree_ ? node->left_tree_ : node->right_tree_);
+            only_child->parent_tree_ = parent;
             if (node == root_)
                 root_ = only_child;
             if(node == lowest_node_)
@@ -148,17 +148,17 @@ class Tree
             if(node == highest_node_)
                 highest_node_ = Previous(node);
             
-            if (parent->tree_left_ == node)
-                parent->tree_left_ = only_child;
+            if (parent->left_tree_ == node)
+                parent->left_tree_ = only_child;
             else
-                parent->tree_right_ = only_child;
+                parent->right_tree_ = only_child;
            
             linkedlist_->PopThis(node);
             --tree_size_;
         }
 
         void DeleteLeaf(Node * leaf) {
-            Node* parent = leaf->tree_parent_;
+            Node* parent = leaf->parent_tree_;
             if (leaf == root_)
                 root_ = parent;
             if (leaf == lowest_node_)
@@ -167,10 +167,10 @@ class Tree
                 highest_node_ = parent;
             
             if (parent != nullptr) {
-                if (parent->tree_left_ == leaf)
-                    parent->tree_left_ = nullptr;
+                if (parent->left_tree_ == leaf)
+                    parent->left_tree_ = nullptr;
                 else
-                    parent->tree_right_ = nullptr;
+                    parent->right_tree_ = nullptr;
             }
             linkedlist_->PopThis(leaf);
             --tree_size_;
@@ -226,63 +226,63 @@ class Tree
         }
 
         Node* Next(Node* node) {
-            if (node->tree_right_ == nullptr) {
+            if (node->right_tree_ == nullptr) {
                 while (1) {
                     //cout << "next loop" << endl;
-                    if (node->tree_parent_ == nullptr)
+                    if (node->parent_tree_ == nullptr)
                         return nullptr;
-                    if (node->tree_parent_->tree_left_ == node)
-                        return node->tree_parent_;
-                    if (node->tree_parent_->tree_right_ == node)
-                        node = node->tree_parent_;
+                    if (node->parent_tree_->left_tree_ == node)
+                        return node->parent_tree_;
+                    if (node->parent_tree_->right_tree_ == node)
+                        node = node->parent_tree_;
                 }
             }
-            return Min(node->tree_right_);
+            return Min(node->right_tree_);
         }
 
         Node* Previous(Node* node) {
-            if (node->tree_left_ == nullptr) {
+            if (node->left_tree_ == nullptr) {
                 while (1) {
-                    if (node->tree_parent_ == nullptr)
+                    if (node->parent_tree_ == nullptr)
                         return nullptr;
-                    if (node->tree_parent_->tree_right_ == node)
-                        return node->tree_parent_;
-                    if (node->tree_parent_->tree_left_ == node)
-                        node = node->tree_parent_;
+                    if (node->parent_tree_->right_tree_ == node)
+                        return node->parent_tree_;
+                    if (node->parent_tree_->left_tree_ == node)
+                        node = node->parent_tree_;
                 }
             }
-            return Max(node->tree_left_);
+            return Max(node->left_tree_);
         }
 
         Node* Max(Node* node) {
-            while(node->tree_right_ != nullptr)
-                node = node->tree_right_;          
+            while(node->right_tree_ != nullptr)
+                node = node->right_tree_;          
             return node;
         }
 
         Node* Min(Node* node) {
-            while (node->tree_left_ != nullptr)
-                node = node->tree_left_;
+            while (node->left_tree_ != nullptr)
+                node = node->left_tree_;
             return node;
         }
 
-        Node* findPos(int fruitID) {
+        Node* findPos(int key) {
             Node* tempnode = root_;
             while(tempnode != nullptr) {
-                //cout << tempnode->fruitID_ << " at address:  " << tempnode << endl;
+                //cout << tempnode->key_ << " at address:  " << tempnode << endl;
 
-                if(fruitID == tempnode->fruitID_)
+                if(key == tempnode->key_)
                     return tempnode;
-                if(fruitID < tempnode->fruitID_) {
-                    if(tempnode->tree_left_ == nullptr)
+                if(key < tempnode->key_) {
+                    if(tempnode->left_tree_ == nullptr)
                         return tempnode;
-                    tempnode = tempnode->tree_left_;
+                    tempnode = tempnode->left_tree_;
                     continue;
                 }
-                if(fruitID > tempnode->fruitID_) {
-                    if(tempnode->tree_right_ == nullptr)
+                if(key > tempnode->key_) {
+                    if(tempnode->right_tree_ == nullptr)
                         return tempnode;
-                    tempnode = tempnode->tree_right_;
+                    tempnode = tempnode->right_tree_;
                     continue;
                 }
             }
@@ -298,11 +298,11 @@ class Tree
             cout << "treeID_ = " << treeID_ << endl;
             cout << "isEmpty_ = " << (isEmpty_ == 0 ? "no" : "yes") << endl;
             cout << "tree_size_ = " << tree_size_ << endl;
-            cout << "root_->fruitID =          " << root_->fruitID_;
+            cout << "root_->key =          " << root_->key_;
             cout << "  at address: " << root_ << endl;
-            cout << "lowest_node_->fruitID_ =  " << lowest_node_->fruitID_;
+            cout << "lowest_node_->key_ =  " << lowest_node_->key_;
             cout << "  at address: " << lowest_node_ << endl;
-            cout << "highest_node_->fruitID_ = " << highest_node_->fruitID_;
+            cout << "highest_node_->key_ = " << highest_node_->key_;
             cout << "  at address: " << highest_node_ << endl;
             cout << "----------------------" << endl;
         }
@@ -320,15 +320,15 @@ class Tree
 
         int lowest_ripe_rate_;
         int highest_ripe_rate_;
-        Node* best_fruit_;
+        Node* best_key_;
 };
 
 
 
 #define DOES_NODE_EXIST(node)           ( (node != nullptr) ? true : false )
-#define CHECK_FOR_NULL_PARENT(node)     ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_parent_ ) ? (node)->tree_parent_ : nullptr ) : nullptr )
-#define CHECK_FOR_NULL_LEFT(node)       ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_left_   ) ? (node)->tree_left_   : nullptr ) : nullptr )
-#define CHECK_FOR_NULL_RIGHT(node)      ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->tree_right_  ) ? (node)->tree_right_  : nullptr ) : nullptr )
+#define CHECK_FOR_NULL_PARENT(node)     ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->parent_tree_ ) ? (node)->parent_tree_ : nullptr ) : nullptr )
+#define CHECK_FOR_NULL_LEFT(node)       ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->left_tree_   ) ? (node)->left_tree_   : nullptr ) : nullptr )
+#define CHECK_FOR_NULL_RIGHT(node)      ( DOES_NODE_EXIST(node) ?  ( DOES_NODE_EXIST( (node)->right_tree_  ) ? (node)->right_tree_  : nullptr ) : nullptr )
 
 #define IF_EXIST_RETURN_VARIABLE(node, direction, variable, if_false)  ( DOES_NODE_EXIST(node) ? ( DOES_NODE_EXIST( node->direction ) ? node->direction->variable : if_false ) : if_false )
 #define UNBALANCED_LEFT 2
@@ -346,14 +346,14 @@ void Tree::BalanceTree(Node* node) {
         
         int height_zero = 0;
         if (node->balance_factor_ == UNBALANCED_LEFT || node->balance_factor_ == UNBALANCED_RIGHT) {
-            int left_balance_factor = IF_EXIST_RETURN_VARIABLE(node, tree_left_, balance_factor_, height_zero);
-            int right_balance_factor = IF_EXIST_RETURN_VARIABLE(node, tree_right_, balance_factor_, height_zero);
+            int left_balance_factor = IF_EXIST_RETURN_VARIABLE(node, left_tree_, balance_factor_, height_zero);
+            int right_balance_factor = IF_EXIST_RETURN_VARIABLE(node, right_tree_, balance_factor_, height_zero);
 
             if (node->balance_factor_ == UNBALANCED_LEFT) {
                 if (left_balance_factor == LEFT_HEAVY)
                     RightRotation(node);
                 else {
-                    LeftRotation(node->tree_left_);
+                    LeftRotation(node->left_tree_);
                     RightRotation(node);
                 }
             }
@@ -361,14 +361,14 @@ void Tree::BalanceTree(Node* node) {
                 if (right_balance_factor == RIGHT_HEAVY)
                     LeftRotation(node);
                 else {
-                    RightRotation(node->tree_right_);
+                    RightRotation(node->right_tree_);
                     LeftRotation(node);
                 }
             }
         }
 
         UpdateHeightAndBalanceFactor(node);
-        node = node->tree_parent_;
+        node = node->parent_tree_;
     } while (node != nullptr);
 
     return;
@@ -378,12 +378,12 @@ void Tree::UpdateHeightAndBalanceFactor(Node* node) {
 
     if (DOES_NODE_EXIST(node) == false)
         return;
-    if (node->tree_parent_ == nullptr)
+    if (node->parent_tree_ == nullptr)
         root_ = node;
 
     int height_zero = 0;
-    int left_height = IF_EXIST_RETURN_VARIABLE(node, tree_left_, height_, height_zero);
-    int right_height = IF_EXIST_RETURN_VARIABLE(node, tree_right_, height_, height_zero);
+    int left_height = IF_EXIST_RETURN_VARIABLE(node, left_tree_, height_, height_zero);
+    int right_height = IF_EXIST_RETURN_VARIABLE(node, right_tree_, height_, height_zero);
 
     node->height_ = 1 + std::max(left_height, right_height);
     node->balance_factor_ = left_height - right_height;
@@ -396,7 +396,7 @@ void PrintTree(Tree& tree) {
     cout << endl << endl <<
         "----------------- Iterator Tree ID = "<< tree.treeID_ << " -----------------" << endl << endl;
     for (auto it : tree) {
-        cout << "iterator curent node value: " << (it)->fruitID_ << endl;
+        cout << "iterator curent node value: " << (it)->key_ << endl;
         (it)->PrintNode();
         cout << "---------------------------------------" << endl << endl;
     }
@@ -416,20 +416,20 @@ void Tree::LeftRotation(Node* node) {
     Node* right_node_lefttson = CHECK_FOR_NULL_LEFT(right_node);
 
     if (DOES_NODE_EXIST(right_node)) {
-        right_node->tree_parent_ = father_node;
+        right_node->parent_tree_ = father_node;
         if (DOES_NODE_EXIST(father_node)) {
-            if (father_node->tree_left_ == node)
-                node->tree_parent_->tree_left_ = right_node;
+            if (father_node->left_tree_ == node)
+                node->parent_tree_->left_tree_ = right_node;
             else
-                node->tree_parent_->tree_right_ = right_node;
+                node->parent_tree_->right_tree_ = right_node;
         }
 
-        right_node->tree_left_ = node;
-        node->tree_parent_ = right_node;
+        right_node->left_tree_ = node;
+        node->parent_tree_ = right_node;
 
-        node->tree_right_ = right_node_lefttson;
+        node->right_tree_ = right_node_lefttson;
         if (DOES_NODE_EXIST(right_node_lefttson))
-            right_node_lefttson->tree_parent_ = node;
+            right_node_lefttson->parent_tree_ = node;
 
         if (node == root_)
             root_ = right_node;
@@ -443,20 +443,20 @@ void Tree::RightRotation(Node* node) {
     Node* left_node_rightson = CHECK_FOR_NULL_RIGHT(left_node);
 
     if (DOES_NODE_EXIST(left_node)) {
-        left_node->tree_parent_ = father_node;
+        left_node->parent_tree_ = father_node;
         if (DOES_NODE_EXIST(father_node)) {
-            if(father_node->tree_left_ == node)
-                node->tree_parent_->tree_left_ = left_node;
+            if(father_node->left_tree_ == node)
+                node->parent_tree_->left_tree_ = left_node;
             else
-                node->tree_parent_->tree_right_ = left_node;
+                node->parent_tree_->right_tree_ = left_node;
         }
 
-        left_node->tree_right_ = node;
-        node->tree_parent_ = left_node;
+        left_node->right_tree_ = node;
+        node->parent_tree_ = left_node;
 
-        node->tree_left_ = left_node_rightson;
+        node->left_tree_ = left_node_rightson;
         if (DOES_NODE_EXIST(left_node_rightson))
-            left_node_rightson->tree_parent_ = node;
+            left_node_rightson->parent_tree_ = node;
 
         if (root_ = node)
             root_ = left_node;

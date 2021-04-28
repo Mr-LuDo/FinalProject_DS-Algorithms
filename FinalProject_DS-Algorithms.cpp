@@ -19,32 +19,32 @@ int main()
     Tree tree2(treeID2, &LL1);
 
 
-    tree1.AddFruit(7);
-    tree1.AddFruit(7);
-    tree1.AddFruit(5);
-    tree1.AddFruit(9);
-    tree1.AddFruit(15);
-    tree1.AddFruit(1);
-    tree1.AddFruit(9);
-    tree1.AddFruit(155);
-    tree1.AddFruit(91);
-    tree1.AddFruit(11);
-    tree1.AddFruit(6);
-    tree1.AddFruit(52);
+    tree1.AddNode(7);
+    tree1.AddNode(7);
+    tree1.AddNode(5);
+    tree1.AddNode(9);
+    tree1.AddNode(15);
+    tree1.AddNode(1);
+    tree1.AddNode(9);
+    tree1.AddNode(155);
+    tree1.AddNode(91);
+    tree1.AddNode(11);
+    tree1.AddNode(6);
+    tree1.AddNode(52);
 
 
-  /*  tree2.AddFruit(17);
-    tree2.AddFruit(71);
-    tree2.AddFruit(55);
-    tree2.AddFruit(96);
-    tree2.AddFruit(115);
-    tree2.AddFruit(11);
-    tree2.AddFruit(79);
-    tree2.AddFruit(125);
-    tree2.AddFruit(91);
-    tree2.AddFruit(115);
-    tree2.AddFruit(67);
-    tree2.AddFruit(8);
+  /*  tree2.AddNode(17);
+    tree2.AddNode(71);
+    tree2.AddNode(55);
+    tree2.AddNode(96);
+    tree2.AddNode(115);
+    tree2.AddNode(11);
+    tree2.AddNode(79);
+    tree2.AddNode(125);
+    tree2.AddNode(91);
+    tree2.AddNode(115);
+    tree2.AddNode(67);
+    tree2.AddNode(8);
 
     tree1.PrintTreeData();
     cout << "linked list size: " << LL1.size() << endl;
@@ -83,7 +83,7 @@ int main()
     //cout << "&temp = " << &temp << endl;
 
      
-    //cout << tree1.findPos(11)->fruitID_ << " at address:  " << tree1.findPos(11) << endl;
+    //cout << tree1.findPos(11)->key_ << " at address:  " << tree1.findPos(11) << endl;
     tree1.DeleteNode(11);
     tree1.DeleteNode(11);
     tree1.DeleteNode(9);

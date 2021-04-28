@@ -38,24 +38,24 @@ class LinkedListExtraData : public LinkedList {
             }
         }
 
-        bool PushFrontfruit(const int& fruitID, int treeID, Tree* tree) {
-            if(Search(fruitID) != nullptr) {
-                cout << "fruit already exist, no action were taken." << endl;
+        bool PushFront(const int& key, int treeID, Tree* tree) {
+            if(Search(key) != nullptr) {
+                cout << "key already exist, no action were taken." << endl;
                 return false;
             }
-            PushFront(fruitID);
+            PushFront(key);
             first_node_->treeID_ = treeID;
             first_node_->tree_ = tree;
             return true;
         }
 
-        Node* Search(int fruitID) {
+        Node* Search(int key) {
             if(size_ == 0) 
                 return nullptr;
 
             Node* temp_node = first_node_;
             do {
-                if(temp_node->fruitID_ == fruitID)
+                if(temp_node->key_ == key)
                     return temp_node;
                 Node* tmp = Next(temp_node);
                 if(tmp == nullptr)
@@ -66,8 +66,8 @@ class LinkedListExtraData : public LinkedList {
             return nullptr;
         }
 
-        void PushFront(const int& fruitID) {
-            auto new_node = new(Node)(fruitID);
+        void PushFront(const int& key) {
+            auto new_node = new(Node)(key);
             new_node->linkedlist_ = this;
 
             if (size_ == 0) {
@@ -86,8 +86,8 @@ class LinkedListExtraData : public LinkedList {
             ++size_;
         }
 
-        void PushBack(const int& fruitID) {
-            auto new_node = new(Node)(fruitID);
+        void PushBack(const int& key) {
+            auto new_node = new(Node)(key);
             new_node->linkedlist_ = this;
 
             if (size_ == 0) {
@@ -106,11 +106,11 @@ class LinkedListExtraData : public LinkedList {
             ++size_;
         }
 
-        void PushAfterThis(Node* node, int fruitID) {
+        void PushAfterThis(Node* node, int key) {
             if(node->linkedlist_ != this) 
                 return;
             
-            auto new_node = new(Node)(fruitID);
+            auto new_node = new(Node)(key);
             new_node->linkedlist_ = this;
 
             new_node->ll_next_ = node->ll_next_;
@@ -152,13 +152,12 @@ class LinkedListExtraData : public LinkedList {
                 "-------------" << endl << endl;
 
             for (auto i = first_node_; i != last_node_; i = Next(i)) {
-                cout << "fruitID_  = " << i->fruitID_;
+                cout << "key_  = " << i->key_;
                 cout << "  at address: " << i << endl;
             }
-                cout << "fruitID_  = " << last_node_->fruitID_;
+                cout << "key_  = " << last_node_->key_;
                 cout << "  at address: " << last_node_ << endl;
         }
-
 
     private:
         Node* first_node_;
