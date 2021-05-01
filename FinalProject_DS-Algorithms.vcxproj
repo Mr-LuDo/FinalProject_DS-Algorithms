@@ -140,12 +140,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FinalProject_DS-Algorithms.cpp" />
-    <ClCompile Include="statistics.cpp" />
+    <ClCompile Include="tree.cpp" />
+    <ClCompile Include="Statistics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="linked_lIst.h" />
     <ClInclude Include="node.h" />
-    <ClInclude Include="statistics.h" />
+    <ClInclude Include="Statistics.h" />
     <ClInclude Include="tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

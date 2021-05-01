@@ -15,21 +15,16 @@ class Node {
     public:
         Node(int key = -1) :
             linkedlist_(nullptr), ll_next_(nullptr), ll_previous_(nullptr),
-            key_(key), treeID_(-1), ripeRate_(0),
-            tree_(nullptr), parent_tree_(nullptr), left_tree_(nullptr), right_tree_(nullptr),
+            key_(key), treeID_(-1), ripeRate_(0), tree_(nullptr),
+            parent_tree_(nullptr), left_tree_(nullptr), right_tree_(nullptr),
             height_(0), balance_factor_(0)
         {}
 
         ~Node() = default;
 
-        void UpdateTree(Tree* tree, Node* parent, Node* left, Node* right) {
-            tree_ = tree;
-            parent_tree_ = parent;
-            left_tree_ = left;
-            right_tree_ = right;
-        }
-
         void PrintNode() {
+            cout << "------------- PrintNode ----------------" << endl;
+
             cout << "key data: " <<endl;
             cout << "key_         = " << key_ << endl;
             cout << "linkedlist_  = " << linkedlist_ << endl;
@@ -49,6 +44,8 @@ class Node {
             cout << "-----------------------------" << endl;
             cout << "height_         = " << height_ << endl;
             cout << "balance_factor_ = " << balance_factor_ << endl;
+            cout << "------------- End PrintNode ----------------" << endl;
+
         }
 
     // linked list 

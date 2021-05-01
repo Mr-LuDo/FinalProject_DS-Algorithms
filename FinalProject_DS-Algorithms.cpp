@@ -1,15 +1,60 @@
 // FinalProject_DS-Algorithms.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+
 
 #include <iostream>
-#include "Node.h"
-#include "linked_list.h"
-#include "tree.h"
-
 using namespace std;
-using std::exception;
+
+#include "Linked_list.h"
+#include "Tree.h"
+#include "Statistics.h"
+
+//using std::exception;
+
+int main1();
+
+#define N 10
 
 int main()
+{
+    //main1();
+
+
+    Statistics* DS = new Statistics(); // Call constructor
+    DS->Init(N);
+    DS->PlantTree(1, 3);
+    DS->PlantTree(2, 1);
+    DS->PlantTree(5, 0);
+    DS->PlantTree(4, 3);
+
+    DS->PrintLLPlantation();
+    
+    DS->AddFruit(1, 3, 7, -1);
+    DS->AddFruit(1, 3, 7, -1);
+    DS->AddFruit(1, 3, 5, -1);
+    DS->AddFruit(1, 3, 9, -1);
+    DS->AddFruit(1, 3, 15, -1);
+    DS->AddFruit(1, 3, 1, -1);
+    DS->AddFruit(1, 3, 9, -1);
+    DS->AddFruit(1, 3, 155, -1);
+    DS->AddFruit(1, 3, 91, -1);
+    DS->AddFruit(1, 3, 11, -1);
+    DS->AddFruit(1, 3, 6, -1);
+    DS->AddFruit(1, 3, 52, -1);
+
+    DS->PrintLLFruits();
+    DS->StaPrintTree(1, 3);
+   
+
+
+
+
+    return 0;
+}
+
+
+
+// basics function direct addressing 
+int main1()
 {
     LinkedListExtraData LL1;
 

@@ -1,9 +1,39 @@
-#pragma once
-class Statistics
-{
-	Statistics() = default;
-	~Statistics() = default;
+#ifndef STATISTICS_H
+#define STATISTICS_H
 
+#include "Linked_list.h"
+#include "Tree.h"
+
+class Statistics {
+    public:
+        Statistics();
+        ~Statistics();
+        
+        void Init(int N);
+        void PlantTree(int i, int j);
+        void AddFruit(int i, int j, int fruitID, int ripeRate);
+        void PickFruit(int fruitID);
+        void RateFruit(int fruitID, int ripeRate);
+        void GetBestFruit(int i, int j);
+        void GetAllFruitsByRate(int i, int j);
+        void UpdateRottenFruits(int rottenBase, int rottenFactor);
+        void Quit(); // Destructor???
+        //void Quit(void** DS); // Destructor???
+
+        Node* FindTree(int i, int j, Node* start_point);
+        void PrintLLPlantation();
+        void PrintLLFruits();
+        void StaPrintTree(int i, int j);
+        int TreeID(int i, int j);
+
+    protected:
+
+    private:
+        LinkedListExtraData* Plantation_ll_;
+        Tree* Plantation_tree_;
+        int Plantation_size_;
+        LinkedListExtraData* Fruits_ll_;
 
 };
 
+#endif // STATISTICS_H

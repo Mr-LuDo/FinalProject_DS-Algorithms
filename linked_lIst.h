@@ -1,9 +1,12 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-#include <memory>
-#include "Node.h"
+#include <iostream>
+using namespace std;
 
+//#include <memory>
+
+#include "Node.h"
 
 class LinkedList {
  public:
@@ -26,7 +29,8 @@ class LinkedList {
 // ---------------------------------- LinkedListExtraData ---------------------------------------------------
 
 
-class LinkedListExtraData : public LinkedList {
+class LinkedListExtraData : public LinkedList 
+{
     public:
         LinkedListExtraData()
             : first_node_(nullptr), last_node_(nullptr), size_(0) 
@@ -34,7 +38,7 @@ class LinkedListExtraData : public LinkedList {
 
         virtual ~LinkedListExtraData() override {
             while (size_) {
-                //cout << "ll deteting size = " << size() << endl;
+                //cout << "ll deleting size = " << size() << endl;
                 //PrintLinkedList();
                 PopFront();
             }
@@ -133,6 +137,7 @@ class LinkedListExtraData : public LinkedList {
                 return;
             if (first_node_ == last_node_) {
                 first_node_ = last_node_ = nullptr;
+            }
             else {
                 if (node == first_node_)
                     first_node_ = Next(node);
@@ -159,6 +164,14 @@ class LinkedListExtraData : public LinkedList {
             cout << endl << endl <<
                 " ----------------- Linked list ----"
                 "-------------" << endl << endl;
+            if (size() == 0) {
+                cout << "ll empty" << endl;
+                return;
+            }
+
+            cout << "size_" << size_ << endl;
+            cout << "first_node_" << first_node_ << endl;
+            cout << "last_node_" << last_node_ << endl;
 
             for (auto i = first_node_; i != last_node_; i = Next(i)) {
                 cout << "key_  = " << i->key_;
@@ -172,6 +185,7 @@ class LinkedListExtraData : public LinkedList {
         Node* first_node_;
         Node* last_node_;
         size_t size_;
+
 };
 
 
