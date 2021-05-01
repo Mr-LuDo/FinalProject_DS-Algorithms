@@ -7,19 +7,24 @@
 
 using namespace std;
 
-
-
-
 class Tree
 {
     public:
-        Tree(int treeID, LinkedListExtraData* LL) :
-            treeID_(treeID), isEmpty_(true), tree_size_(0), linkedlist_(LL),
+        Tree(int treeID, LinkedListExtraData* ll) :
+            treeID_(treeID), isEmpty_(true), tree_size_(0), linkedlist_(ll),
             root_(nullptr), lowest_node_(nullptr), highest_node_(nullptr),
             best_key_(nullptr), lowest_ripe_rate_(0), highest_ripe_rate_(0)
         {}
 
-        virtual ~Tree() = default;
+        // not recomended for deleting all field since it's an AVL tree therefore after each deletion
+        // would be best to detete the linked list before and then deleting the tree which would be empty.
+        virtual ~Tree() {
+            while (size())
+                DeleteNode(lowest_node_);
+            //linkedlist_ = nullptr;
+            //cout << "deleted all tree" << endl;
+            //cout << "tree size = " << size() <<  endl;
+        }
 
         void AddNode(int key) {
             if(linkedlist_->PushFront(key, treeID_, this) == false)
@@ -84,9 +89,12 @@ class Tree
             Node* node = findPos(key);
             if (node->key_ != key)
                 return;
-
+            DeleteNode(node);
+        }
+        
+        void DeleteNode(Node* node) {
             Node* parent = node->parent_tree_;
-
+            
             if (node->left_tree_ == nullptr && node->right_tree_ == nullptr) {
                 DeleteLeaf(node);
             }
@@ -95,6 +103,7 @@ class Tree
                     DeleteNodeWithOnechild(node);
                 }
                 else {
+                    //cout << "swap" << endl;
                     SwapNodes(*node, *Next(node));
                     if (node->left_tree_ == nullptr && node->right_tree_ == nullptr)
                         DeleteLeaf(node);
@@ -148,11 +157,12 @@ class Tree
             if(node == highest_node_)
                 highest_node_ = Previous(node);
             
-            if (parent->left_tree_ == node)
-                parent->left_tree_ = only_child;
-            else
-                parent->right_tree_ = only_child;
-           
+            if (parent != nullptr) {
+                if (parent->left_tree_ == node)
+                    parent->left_tree_ = only_child;
+                else
+                    parent->right_tree_ = only_child;
+            }
             linkedlist_->PopThis(node);
             --tree_size_;
         }
@@ -197,10 +207,6 @@ class Tree
                     if(currentNode_ == other.currentNode_)
                         return true;
                     
-                    //if(currentNode_->treeID_ != other.currentNode_->treeID_) {
-                    //    cout << "iterator- wrong tree." << endl;
-                    //    return false;
-                    //}
                     return false;
                 }
 
@@ -228,7 +234,6 @@ class Tree
         Node* Next(Node* node) {
             if (node->right_tree_ == nullptr) {
                 while (1) {
-                    //cout << "next loop" << endl;
                     if (node->parent_tree_ == nullptr)
                         return nullptr;
                     if (node->parent_tree_->left_tree_ == node)

@@ -37,7 +37,7 @@ class Node {
             cout << "ll_previous_ = " << ll_previous_ <<endl;
             cout << "-------------" << endl;
             cout << "tree data: " << endl;
-            cout << "tree_                  = " << treeID_ << endl;
+            cout << "tree_                  = " << treeID_;
             cout << "  at address: " << tree_ << endl;
             cout << "key_                   = " << key_ << endl;
             cout << "parent_tree_->key_ = " << CHECK_FOR_NULL_PTR(parent_tree_);

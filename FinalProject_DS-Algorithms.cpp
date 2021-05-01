@@ -7,7 +7,7 @@
 #include "tree.h"
 
 using namespace std;
-
+using std::exception;
 
 int main()
 {
@@ -33,7 +33,7 @@ int main()
     tree1.AddNode(52);
 
 
-  /*  tree2.AddNode(17);
+    tree2.AddNode(17);
     tree2.AddNode(71);
     tree2.AddNode(55);
     tree2.AddNode(96);
@@ -52,16 +52,16 @@ int main()
     cout << "tree 2 size: " << tree2.size() << endl;
 
     LL1.PrintLinkedList();
-    */
+    
     
  
- /*   tree1.DeleteNode(tree1.findPos(1));
-    PrintTree(tree1);
-    tree1.DeleteNode(tree1.findPos(7));
-    PrintTree(tree1);    
-    tree1.DeleteNode(tree1.findPos(155));
-    PrintTree(tree1);
-*/
+    //tree1.DeleteNode(tree1.findPos(1));
+    //PrintTree(tree1);
+    //tree1.DeleteNode(tree1.findPos(7));
+    //PrintTree(tree1);    
+    //tree1.DeleteNode(tree1.findPos(155));
+    //PrintTree(tree1);
+
 
     PrintTree(tree1);
 
@@ -89,12 +89,25 @@ int main()
     tree1.DeleteNode(9);
     tree1.DeleteNode(1);
     tree1.DeleteNode(6);
+    tree1.DeleteNode(52);
     PrintTree(tree1);
+    //delete &tree1;
 
-    tree1.PrintTreeData();
+    //int temp;
+    //cin >> temp;
+    //tree1.PrintTreeData();
     cout << "linked list size: " << LL1.size() << endl;
     cout << "tree 1 size: " << tree1.size() << endl;
-    cout << "tree 2 size: " << tree2.size() << endl;
+    //cout << "tree 2 size: " << tree2.size() << endl;
+
+    //try {
+    //    delete& tree1;
+    //}
+    //catch (const std::exception& e) {
+    //    cout << e.what() << endl;
+    //}
+
+    //cout << "deleted ll1" << endl;
 
 
 

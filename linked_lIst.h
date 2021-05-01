@@ -29,13 +29,16 @@ class LinkedList {
 class LinkedListExtraData : public LinkedList {
     public:
         LinkedListExtraData()
-            : first_node_(nullptr), last_node_(nullptr), size_(0) {}
+            : first_node_(nullptr), last_node_(nullptr), size_(0) 
+        {}
 
         virtual ~LinkedListExtraData() override {
             while (size_) {
-                //cout << "size of linked list is: " << size_ << endl;
+                //cout << "ll deteting size = " << size() << endl;
+                //PrintLinkedList();
                 PopFront();
             }
+            //cout << "ll deleted all" << endl;
         }
 
         bool PushFront(const int& key, int treeID, Tree* tree) {
@@ -122,29 +125,35 @@ class LinkedListExtraData : public LinkedList {
             ++size_;
         }
 
-
-        void PopBack()  { PopThis(last_node_); }
         void PopFront() { PopThis(first_node_); }
+        void PopBack()  { PopThis(last_node_); }
 
         void PopThis(Node* node) {
             if(node->linkedlist_ != this)
                 return;
-            if (node == first_node_)
-                first_node_ = Next(node);
-            if (node == last_node_)
-                last_node_ = Previous(node);
+            if (first_node_ == last_node_) {
+                first_node_ = last_node_ = nullptr;
+            else {
+                if (node == first_node_)
+                    first_node_ = Next(node);
+                if (node == last_node_)
+                    last_node_ = Previous(node);
 
-            node->ll_next_->ll_previous_ = node->ll_previous_;
-            node->ll_previous_->ll_next_ = node->ll_next_;
+                Next(node)->ll_previous_ = Previous(node);
+                Previous(node)->ll_next_ = Next(node);
+            }
             delete node;
             --size_;
+            //cout << "deleted last node, size : " << size() << endl;
+            //cout << "first_node_ : " << first_node_ << endl;
+            //cout << "last_node_ : " << last_node_ << endl;
         }
 
         Node* Next(Node* node)      { return node->ll_next_;     }
         Node* Previous(Node* node)  { return node->ll_previous_; }
-        Node* Front() const { return first_node_; }
-        Node* Back()  const { return last_node_;  }
-        size_t size() const { return size_;       }
+        Node* Front() const         { return first_node_; }
+        Node* Back()  const         { return last_node_;  }
+        size_t size() const         { return size_;       }
 
         void PrintLinkedList() {
             cout << endl << endl <<
