@@ -9,14 +9,14 @@ class Statistics {
         Statistics();
         ~Statistics();
         
-        void Init(int N);
-        void PlantTree(int i, int j);
-        void AddFruit(int i, int j, int fruitID, int ripeRate);
-        void PickFruit(int fruitID);
+        void Init(int N);       // OK
+        void PlantTree(int i, int j);   // OK
+        void AddFruit(int i, int j, int fruitID, int ripeRate); // OK
+        void PickFruit(int fruitID);    // OK
         void RateFruit(int fruitID, int ripeRate);
-        void GetBestFruit(int i, int j);
-        void GetAllFruitsByRate(int i, int j);
-        void UpdateRottenFruits(int rottenBase, int rottenFactor);
+        void GetBestFruit(int i, int j);            // need to add to node best ripe rate node
+        void GetAllFruitsByRate(int i, int j);      // kinka ok
+        void UpdateRottenFruits(int rottenBase, int rottenFactor); // OK
         void Quit(); // Destructor???
         //void Quit(void** DS); // Destructor???
 

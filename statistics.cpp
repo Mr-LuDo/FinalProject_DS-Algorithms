@@ -82,6 +82,40 @@ void Statistics::GetBestFruit(int i, int j) {
 
 void Statistics::GetAllFruitsByRate(int i, int j) {
     int treeID = TreeID(i, j);
+    Node* tree_node = FindTree(i, j, nullptr);
+    int size = tree_node->tree_->size();
+    int* ripe_rate = new int[size];
+    Node** ripe_rate_nodes = new Node*[size];
+
+    for (int i = 0; i < size; ++i) {
+        ripe_rate[i] = 0;
+        ripe_rate_nodes[i] = nullptr;
+    }
+    
+    for (auto it : *tree_node->tree_)
+        ++ripe_rate[it->ripeRate_];
+
+    for (int i = 1, int prev_pos = 0, int prev_size; i < size; ++i) {
+        if (ripe_rate == 0)
+            continue;
+        prev_size = ripe_rate[prev_pos];
+        int temp = ripe_rate[i];
+
+        ripe_rate[i] = prev_pos + prev_size;
+        prev_size = temp;
+        prev_pos = i;
+    }
+
+    for (auto it : *tree_node->tree_) {
+        int pos = 0;
+        while (ripe_rate_nodes[ripe_rate[it->ripeRate_] + pos] != nullptr) {
+            ++pos;
+        }
+        ripe_rate_nodes[ripe_rate[it->ripeRate_] + pos] = it;
+        pos = 0;
+    }
+
+    delete[] ripe_rate;
     return;
 }
 

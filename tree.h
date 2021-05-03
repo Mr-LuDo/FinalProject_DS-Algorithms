@@ -15,7 +15,7 @@ class Tree
         Tree(int treeID, LinkedListExtraData* ll) :
             treeID_(treeID), isEmpty_(true), tree_size_(0), linkedlist_(ll),
             root_(nullptr), lowest_node_(nullptr), highest_node_(nullptr),
-            best_key_(nullptr), lowest_ripe_rate_(0), highest_ripe_rate_(0)
+            lowest_ripe_rate_(0), highest_ripe_rate_(0), lowest_ripe_rate_node_(nullptr)
         {}
 
         // not recommended for deleting all field since it's an AVL tree therefore after each deletion
@@ -344,7 +344,7 @@ class Tree
 
         int lowest_ripe_rate_;
         int highest_ripe_rate_;
-        Node* best_key_;
+        Node* lowest_ripe_rate_node_;
 };
 
 
