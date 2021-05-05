@@ -141,6 +141,11 @@ void Tree::RightRotation(Node* node) {
 
 Node* Tree::BestRipeRateNode() {
     Node* best_rr = lowest_node_;
+    if (best_rr == nullptr) {
+        cout << "best_rr == nullptr";
+        return nullptr;
+    }
+
     for (auto it : *this) {
         if (best_rr->ripeRate_ > it->ripeRate_)
             best_rr = it;

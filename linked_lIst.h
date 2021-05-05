@@ -47,7 +47,7 @@ class LinkedListExtraData : public LinkedList
 
         bool PushFront(const int& key, int treeID, Tree* tree) {
             if(Search(key) != nullptr) {
-                cout << "key already exist, no action were taken." << endl;
+                //cout << "key already exist, no action were taken." << endl;
                 return false;
             }
             PushFront(key);
