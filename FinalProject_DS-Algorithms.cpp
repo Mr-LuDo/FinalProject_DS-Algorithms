@@ -12,7 +12,7 @@ using namespace std;
 
 int main1();
 
-#define N 10
+#define N 15
 
 int main()
 {

@@ -1,15 +1,18 @@
 #ifndef STATISTICS_H
 #define STATISTICS_H
 
+
+#include "library1.h"
+
 #include "Linked_list.h"
 #include "Tree.h"
 
-typedef enum {
-    SUCCESS = 0,
-    FAILURE = -1,
-    ALLOCATION_ERROR = -2,
-    INVALID_INPUT = -3
-} StatusType;
+//typedef enum {
+//    SUCCESS = 0,
+//    FAILURE = -1,
+//    ALLOCATION_ERROR = -2,
+//    INVALID_INPUT = -3
+//} StatusType;
 
 class DataSructure {
     public:
