@@ -19,30 +19,30 @@ int main()
     //main1();
 
 
-    Statistics* DS = new Statistics(); // Call constructor
-    DS->Init(N);
-    DS->PlantTree(1, 3);
-    DS->PlantTree(2, 1);
-    DS->PlantTree(5, 0);
-    DS->PlantTree(4, 3);
+    Statistics* St = new Statistics(); // Call constructor
+    void* DS = St->Init(N);
+    St->PlantTree(DS, 1, 3);
+    St->PlantTree(DS, 2, 1);
+    St->PlantTree(DS, 5, 0);
+    St->PlantTree(DS, 4, 3);
 
-    DS->PrintLLPlantation();
+    St->PrintLLPlantation(DS);
     
-    DS->AddFruit(1, 3, 7, -1);
-    DS->AddFruit(1, 3, 7, -1);
-    DS->AddFruit(1, 3, 5, -1);
-    DS->AddFruit(1, 3, 9, -1);
-    DS->AddFruit(1, 3, 15, -1);
-    DS->AddFruit(1, 3, 1, -1);
-    DS->AddFruit(1, 3, 9, -1);
-    DS->AddFruit(1, 3, 155, -1);
-    DS->AddFruit(1, 3, 91, -1);
-    DS->AddFruit(1, 3, 11, -1);
-    DS->AddFruit(1, 3, 6, -1);
-    DS->AddFruit(1, 3, 52, -1);
+    St->AddFruit(DS, 1, 3, 7, -1);
+    St->AddFruit(DS, 1, 3, 7, -1);
+    St->AddFruit(DS, 1, 3, 5, -1);
+    St->AddFruit(DS, 1, 3, 9, -1);
+    St->AddFruit(DS, 1, 3, 15, -1);
+    St->AddFruit(DS, 1, 3, 1, -1);
+    St->AddFruit(DS, 1, 3, 9, -1);
+    St->AddFruit(DS, 1, 3, 155, -1);
+    St->AddFruit(DS, 1, 3, 91, -1);
+    St->AddFruit(DS, 1, 3, 11, -1);
+    St->AddFruit(DS, 1, 3, 6, -1);
+    St->AddFruit(DS, 1, 3, 52, -1);
 
-    DS->PrintLLFruits();
-    DS->StaPrintTree(1, 3);
+    St->PrintLLFruits(DS);
+    St->StaPrintTree(DS, 1, 3);
    
 
 
@@ -64,32 +64,32 @@ int main1()
     Tree tree2(treeID2, &LL1);
 
 
-    tree1.AddNode(7);
-    tree1.AddNode(7);
-    tree1.AddNode(5);
-    tree1.AddNode(9);
-    tree1.AddNode(15);
-    tree1.AddNode(1);
-    tree1.AddNode(9);
-    tree1.AddNode(155);
-    tree1.AddNode(91);
-    tree1.AddNode(11);
-    tree1.AddNode(6);
-    tree1.AddNode(52);
+    tree1.AddNode(7, 1);
+    tree1.AddNode(7, 1);
+    tree1.AddNode(5, 1);
+    tree1.AddNode(9, 1);
+    tree1.AddNode(15, 1);
+    tree1.AddNode(1, 1);
+    tree1.AddNode(9, 1);
+    tree1.AddNode(155, 1);
+    tree1.AddNode(91, 1);
+    tree1.AddNode(11, 1);
+    tree1.AddNode(6, 1);
+    tree1.AddNode(52, 1);
 
 
-    tree2.AddNode(17);
-    tree2.AddNode(71);
-    tree2.AddNode(55);
-    tree2.AddNode(96);
-    tree2.AddNode(115);
-    tree2.AddNode(11);
-    tree2.AddNode(79);
-    tree2.AddNode(125);
-    tree2.AddNode(91);
-    tree2.AddNode(115);
-    tree2.AddNode(67);
-    tree2.AddNode(8);
+    tree2.AddNode(17, 1);
+    tree2.AddNode(71, 1);
+    tree2.AddNode(55, 1);
+    tree2.AddNode(96, 1);
+    tree2.AddNode(115, 1);
+    tree2.AddNode(11, 1);
+    tree2.AddNode(79, 1);
+    tree2.AddNode(125, 1);
+    tree2.AddNode(91, 1);
+    tree2.AddNode(115, 1);
+    tree2.AddNode(67, 1);
+    tree2.AddNode(8, 1);
 
     tree1.PrintTreeData();
     cout << "linked list size: " << LL1.size() << endl;

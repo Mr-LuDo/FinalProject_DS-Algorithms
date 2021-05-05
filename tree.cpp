@@ -139,3 +139,11 @@ void Tree::RightRotation(Node* node) {
     }
 }
 
+Node* Tree::BestRipeRateNode() {
+    Node* best_rr = lowest_node_;
+    for (auto it : *this) {
+        if (best_rr->ripeRate_ > it->ripeRate_)
+            best_rr = it;
+    }
+    return best_rr;
+}

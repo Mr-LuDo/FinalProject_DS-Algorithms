@@ -28,13 +28,15 @@ class Tree
             //cout << "tree size = " << size() <<  endl;
         }
 
-        Node* AddNode(int key) {
+        Node* AddNode(int key, int ripe_rate) {
             if (linkedlist_->PushFront(key, treeID_, this) == false) {
                 cout << "linkedlist_->PushFront(key, treeID_, this) == false" << endl;
                 return nullptr;
             }
 
             Node* temp_node = linkedlist_->Front();
+            temp_node->ripeRate_ = ripe_rate;
+
             if(isEmpty_) {
                 cout << "tree is empty" << endl;
                 isEmpty_ = false;
@@ -62,6 +64,14 @@ class Tree
                 }
             }
             BalanceTree(temp_node);
+
+            if (lowest_ripe_rate_node_ == nullptr)
+                lowest_ripe_rate_node_ = temp_node;
+            else {
+                if (temp_node->ripeRate_ < lowest_ripe_rate_node_->ripeRate_)
+                    lowest_ripe_rate_node_ = temp_node;
+            }
+
             return temp_node;
         }
 
@@ -126,6 +136,8 @@ class Tree
             }
 
             BalanceTree(parent);
+            BestRipeRateNode();
+
             return;
         }
         
@@ -330,6 +342,8 @@ class Tree
             cout << "  at address: " << highest_node_ << endl;
             cout << "----------------------" << endl;
         }
+
+        Node* BestRipeRateNode();
 
         int treeID_;
 
