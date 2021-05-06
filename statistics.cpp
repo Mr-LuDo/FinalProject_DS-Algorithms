@@ -131,7 +131,18 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
     }
 
     int size = tree_node->tree_->size();
-    cout << "size = " << size << endl;
+    //cout << "size = " << size << endl;
+    if (size == 0) {
+        *fruits = NULL;
+        *numOffFruits = size;
+        return SUCCESS;
+    }
+    if (size == 1) {
+        *fruits = new int[size];
+        **fruits = tree_node->tree_->BestRipeRateNode()->key_;
+        *numOffFruits = size;
+        return SUCCESS;
+    }
 
     int* ripe_rate = new int[size];
     int* new_position = new int[size];
@@ -142,6 +153,7 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         ripe_rate[i] = 0;
         new_position[i] = 0;
         ripe_rate_fuitID[i] = 0;
+        ripe_rate_fuitID_rr[i] = 0;
     }
     
     for (auto it : *tree_node->tree_) {
@@ -158,12 +170,12 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         ++ripe_rate[it->ripeRate_];
     }
 
-    //"----------------------------------------"
-    cout << "ripe rate before changes:" << endl;
-    for (int i = 0; i < size; ++i)
-        cout << ripe_rate[i] << " ";
-    cout << endl;
-    //"----------------------------------------"
+    ////"----------------------------------------"
+    //cout << "ripe rate before changes:" << endl;
+    //for (int i = 0; i < size; ++i)
+    //    cout << ripe_rate[i] << " ";
+    //cout << endl;
+    ////"----------------------------------------"
     int sum_prev_nodes = 0;
     for (int i = 1; i < size; ++i) {
         if (ripe_rate[i] == 0)
@@ -173,12 +185,12 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         sum_prev_nodes += ripe_rate[i];
     }
 
-    //"----------------------------------------"
-    cout << "new_position after changes:" << endl;
-    for (int i = 0; i < size; ++i)
-        cout << new_position[i] << " ";
-    cout << endl;
-    //"----------------------------------------"
+    ////"----------------------------------------"
+    //cout << "new_position after changes:" << endl;
+    //for (int i = 0; i < size; ++i)
+    //    cout << new_position[i] << " ";
+    //cout << endl;
+    ////"----------------------------------------"
 
     for (auto it : *tree_node->tree_) {
         if (it->ripeRate_ >= size || new_position[it->ripeRate_] >= size) {
@@ -193,7 +205,7 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         ++new_position[it->ripeRate_];
     }
 
-    //--------------------------------------------------------------------
+    //-------------------------- this is for all ripe rate > size(k) ------------------------------------------
     for (int i = 0; i < size; ++i) {
         ripe_rate[i] = 0;
         new_position[i] = 0;
@@ -211,37 +223,31 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
             max_rr = it->ripeRate_;
     }    
 
-
-    //for (int i = 0; i < size; ++i) {
-    //    if (ripe_rate_fuitID[i] == 0)
-    //        last_pos = i;
-    //}
-
-    cout << "----------------------------------------" << endl;
-    cout << "max rr = " << max_rr << endl;
-    cout << "size = " << size << endl;
-    cout << "last_pos = " << last_pos << endl;
-    cout << "----------------------------------------" << endl;
+    //cout << "----------------------------------------" << endl;
+    //cout << "max rr = " << max_rr << endl;
+    //cout << "size = " << size << endl;
+    //cout << "last_pos = " << last_pos << endl;
+    //cout << "----------------------------------------" << endl;
 
     int dx = ceil(double(max_rr - size) / (size - last_pos));
-    cout << "dx = " << dx << endl;
+    //cout << "dx = " << dx << endl;
 
     for (auto it : *tree_node->tree_) {
         if (it->ripeRate_ >= size) {
-            int new_pos = (it->ripeRate_ - size) / dx;
-            
-            cout << "new pos = " << new_pos << endl;
+            int new_pos = double(it->ripeRate_ - size) / dx;
+            if (new_pos >= size - last_pos)
+                new_pos = size - last_pos - 1;
 
             ++ripe_rate[last_pos + new_pos];
-            //ripe_rate_fuitID[last_pos + new_pos - 1] = it->key_;
         }
     }
-    //"----------------------------------------"
-    cout << "ripe rate before changes:" << endl;
-    for (int i = 0; i < size; ++i)
-        cout << ripe_rate[i] << " ";
-    cout << endl;
-    //"----------------------------------------"
+
+    ////"----------------------------------------"
+    //cout << "ripe rate before changes:" << endl;
+    //for (int i = 0; i < size; ++i)
+    //    cout << ripe_rate[i] << " ";
+    //cout << endl;
+    ////"----------------------------------------"
 
     for (int i = sum_prev_nodes; i < size; ++i) {
         if (ripe_rate[i] == 0)
@@ -250,32 +256,40 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         new_position[i] = sum_prev_nodes;
         sum_prev_nodes += ripe_rate[i];
     }
-    //"----------------------------------------"
-    cout << "new_position after changes:" << endl;
-    for (int i = 0; i < size; ++i)
-        cout << new_position[i] << " ";
-    cout << endl;
-    //"----------------------------------------"
+
+    ////"----------------------------------------"
+    //cout << "new_position after changes:" << endl;
+    //for (int i = 0; i < size; ++i)
+    //    cout << new_position[i] << " ";
+    //cout << endl;
+    ////"----------------------------------------"
     for (auto it : *tree_node->tree_) {
         if (it->ripeRate_ < size )
-            continue;
-        
-        int new_pos = (it->ripeRate_ - size) / dx;
+            continue;        
+
+        int new_pos = double(it->ripeRate_ - size) / dx;
+        //cout << "new_pos = " << new_pos << endl;
+        if (new_pos >= size - last_pos)
+            new_pos = size - last_pos - 1;
+        //cout << "new_pos = " << new_pos << endl;
+
         ripe_rate_fuitID[new_position[last_pos + new_pos]] = it->key_;
         ripe_rate_fuitID_rr[new_position[last_pos + new_pos]] = it->ripeRate_;
 
         ++new_position[last_pos + new_pos];
     }
 
-    //"----------------------------------------"
-    cout << "new_position after changes:" << endl;
-    for (int i = 0; i < size; ++i)
-        cout << ripe_rate_fuitID_rr[i] << " ";
-    cout << endl;
-    //"----------------------------------------"
+    ////"----------------------------------------"
+    //cout << "ripe_rate_fuitID_rr after changes:" << endl;
+    //for (int i = 0; i < size; ++i)
+    //    cout << ripe_rate_fuitID_rr[i] << " ";
+    //cout << endl;
+    ////"----------------------------------------"
+
 
     delete[] ripe_rate;
     delete[] new_position;
+    delete[] ripe_rate_fuitID_rr;
     *fruits = ripe_rate_fuitID;
     *numOffFruits = size;
     return SUCCESS;
@@ -359,10 +373,6 @@ StatusType Statistics::UpdateRottenFruits(int rottenBase, int rottenFactor) {
 
     return SUCCESS;
 }
-
-
-
-
 
 // -------------------------- helpers ----------------------------------
 
