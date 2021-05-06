@@ -18,16 +18,6 @@ class Tree
             lowest_ripe_rate_(0), highest_ripe_rate_(0), lowest_ripe_rate_node_(nullptr)
         {}
 
-        // not recommended for deleting all field since it's an AVL tree therefore after each deletion
-        // would be best to delete the linked list before and then deleting the tree which would be empty.
-        //virtual ~Tree() {
-        //    //while (size())
-        //        //DeleteNode(lowest_node_);
-        //    //linkedlist_ = nullptr;
-        //    //cout << "deleted all tree" << endl;
-        //    //cout << "tree size = " << size() <<  endl;
-        //}
-
         virtual ~Tree() = default;
 
         Node* AddNode(int key, int ripe_rate) {

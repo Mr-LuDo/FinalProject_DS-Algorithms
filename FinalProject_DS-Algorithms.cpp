@@ -83,9 +83,15 @@ if ( (read_parameters)!=(required_parameters) ) { printf(ErrorString); return er
 
 	int main(int argc, const char** argv) {
 		char buffer[MAX_STRING_INPUT_SIZE];
+		FILE * fp = fopen("randtest0.in", "r");
+		if (fp == NULL) {
+	        perror("Unable to open file!");
+	        exit(1);		
+		}
 
 		// Reading commands
-		while (fgets(buffer, MAX_STRING_INPUT_SIZE, stdin) != NULL) {
+		//while (fgets(buffer, MAX_STRING_INPUT_SIZE, stdin) != NULL) {
+		while (fgets(buffer, MAX_STRING_INPUT_SIZE, fp) != NULL) {
 			fflush(stdout);
 			if (parser(buffer) == error)
 				break;

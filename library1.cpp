@@ -2,7 +2,7 @@
 #include "Statistics.h"
 
 void* Init(int N){
-    Statistics *DS = new Statistics(); // Call constructor
+    Statistics *DS = new Statistics();
     DS->Init(N);
     return (void*)DS;
 }
@@ -35,9 +35,8 @@ StatusType UpdateRottenFruits(void *DS, int rottenBase, int rottenFactor){
     return ((Statistics*)DS)->UpdateRottenFruits(rottenBase, rottenFactor);
 }
 
-
 void Quit(void** DS){
-    delete *DS; // Call destructor
+    delete *DS; 
     *DS = NULL;
     return;
 }
