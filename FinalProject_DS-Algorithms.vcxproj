@@ -88,6 +88,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <DisableSpecificWarnings>4996;26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,12 +143,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FinalProject_DS-Algorithms.cpp" />
-    <ClCompile Include="statistics.cpp" />
+    <ClCompile Include="library1.cpp" />
+    <ClCompile Include="tree.cpp" />
+    <ClCompile Include="Statistics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="library1.h" />
     <ClInclude Include="linked_lIst.h" />
     <ClInclude Include="node.h" />
-    <ClInclude Include="statistics.h" />
+    <ClInclude Include="Statistics.h" />
     <ClInclude Include="tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

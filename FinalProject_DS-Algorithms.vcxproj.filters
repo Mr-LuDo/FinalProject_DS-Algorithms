@@ -18,7 +18,13 @@
     <ClCompile Include="FinalProject_DS-Algorithms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="statistics.cpp">
+    <ClCompile Include="Statistics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="library1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +38,10 @@
     <ClInclude Include="tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="statistics.h">
+    <ClInclude Include="Statistics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="library1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
