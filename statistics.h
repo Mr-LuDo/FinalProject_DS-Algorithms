@@ -17,7 +17,8 @@ class Statistics {
         StatusType PickFruit(int fruitID);                                  // OK
         StatusType RateFruit(int fruitID, int ripeRate);                    // OK
         StatusType GetBestFruit(int i, int j, int* fruitID);                // OK
-        StatusType GetAllFruitsByRate(int i, int j, int** fruits, int* numOffFruits); // kinda OK as long as the ripe rate is <= K_tree
+        // kinda OK as long as the ripe rate is <= K_tree, above that i need to sort the nodes
+        StatusType GetAllFruitsByRate(int i, int j, int** fruits, int* numOffFruits); 
         StatusType UpdateRottenFruits(int rottenBase, int rottenFactor);    // OK
 
 

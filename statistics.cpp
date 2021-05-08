@@ -200,7 +200,6 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         else {
             ripe_rate_fuitID[new_position[it->ripeRate_]] = it->key_;
             ripe_rate_fuitID_rr[new_position[it->ripeRate_]] = it->ripeRate_;
-            
         }
         ++new_position[it->ripeRate_];
     }
@@ -279,12 +278,12 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         ++new_position[last_pos + new_pos];
     }
 
-    ////"----------------------------------------"
-    //cout << "ripe_rate_fuitID_rr after changes:" << endl;
-    //for (int i = 0; i < size; ++i)
-    //    cout << ripe_rate_fuitID_rr[i] << " ";
-    //cout << endl;
-    ////"----------------------------------------"
+    //"----------------------------------------"
+    cout << "ripe_rate_fuitID_rr after changes:" << endl;
+    for (int i = 0; i < size; ++i)
+        cout << ripe_rate_fuitID_rr[i] << " ";
+    cout << endl;
+    //"----------------------------------------"
 
 
     delete[] ripe_rate;
