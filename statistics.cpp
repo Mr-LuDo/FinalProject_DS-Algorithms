@@ -113,15 +113,18 @@ StatusType Statistics::GetBestFruit(int i, int j, int* fruitID) {
         return FAILURE;
     }
 
-    Node* best_fruit = tree_node->tree_->BestRipeRateNode();
+    Node* best_fruit = tree_node->tree_->FindBestRipeRateNode();
     *fruitID = best_fruit->key_;
     return SUCCESS;
 }
 
 StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOffFruits) {
+    
+    // ------------------- basics failures and simple case -------------------------------
+    
     if (i < 0 || j < 0 || i >= Plantation_size_ || j >= Plantation_size_ || fruits == NULL || numOffFruits == NULL)
         return INVALID_INPUT; 
-    
+        
     int treeID = TreeID(i, j);
     Node* tree_node = FindTree(i, j, nullptr);
     if (tree_node == nullptr || tree_node->key_ != treeID) {
@@ -130,8 +133,7 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         return FAILURE;
     }
 
-    int size = tree_node->tree_->size();
-    //cout << "size = " << size << endl;
+    const int size = tree_node->tree_->size();
     if (size == 0) {
         *fruits = NULL;
         *numOffFruits = size;
@@ -139,157 +141,130 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
     }
     if (size == 1) {
         *fruits = new int[size];
-        **fruits = tree_node->tree_->BestRipeRateNode()->key_;
+        **fruits = tree_node->tree_->FindBestRipeRateNode()->key_;
         *numOffFruits = size;
         return SUCCESS;
     }
+    // ----------------------------------------------------------------------------------
 
-    int* ripe_rate = new int[size];
-    int* new_position = new int[size];
-    int* ripe_rate_fuitID = new int[size];
-    int* ripe_rate_fuitID_rr = new int[size];
+    int* ripe_rate_counter = new int[size]();
+    int* new_position_inorder = new int[size]();
+    int* ripe_rate_fruitID_sorted = new int[size]();
+    int* ripe_rate_fruitID_rr_sorted = new int[size]();
 
-    for (int i = 0; i < size; ++i) {
-        ripe_rate[i] = 0;
-        new_position[i] = 0;
-        ripe_rate_fuitID[i] = 0;
-        ripe_rate_fuitID_rr[i] = 0;
-    }
+    //for (int i = 0; i < size; ++i) {
+    //    ripe_rate_counter[i] = 0;
+    //    new_position_inorder[i] = 0;
+    //    ripe_rate_fruitID_sorted[i] = 0;
+    //    ripe_rate_fruitID_rr_sorted[i] = 0;
+    //}
     
+    // ---------------- counting how many same ripe rate ---------------------------------
     for (auto it : *tree_node->tree_) {
-
-        //cout << "----------------------------------------" << endl;
-        //cout << "it->key_ = " << it->key_ << endl;
-        //cout << "it->ripeRate_ = " << it->ripeRate_ << endl;
-        //cout << "----------------------------------------" << endl;
-
-        if (it->ripeRate_ >= size) {
-            //cout << "ripeRate_ > size" << endl;
+        if (it->ripeRate_ >= size)
             continue;
-        }
-        ++ripe_rate[it->ripeRate_];
+        ++ripe_rate_counter[it->ripeRate_];
     }
 
-    ////"----------------------------------------"
-    //cout << "ripe rate before changes:" << endl;
-    //for (int i = 0; i < size; ++i)
-    //    cout << ripe_rate[i] << " ";
-    //cout << endl;
-    ////"----------------------------------------"
+    // -- rerouting each ripe rate according to its position (fruitID) and how many repetitions of ripe rate ---
     int sum_prev_nodes = 0;
     for (int i = 1; i < size; ++i) {
-        if (ripe_rate[i] == 0)
+        if (ripe_rate_counter[i] == 0)
             continue;
 
-        new_position[i] = sum_prev_nodes;
-        sum_prev_nodes += ripe_rate[i];
+        new_position_inorder[i] = sum_prev_nodes;
+        sum_prev_nodes += ripe_rate_counter[i];
     }
 
-    ////"----------------------------------------"
-    //cout << "new_position after changes:" << endl;
-    //for (int i = 0; i < size; ++i)
-    //    cout << new_position[i] << " ";
-    //cout << endl;
-    ////"----------------------------------------"
-
+    // -- setting fruits in there new position (in ordered) - for now only those which ripe rate < K_tree - because of the memory limitation ---
     for (auto it : *tree_node->tree_) {
-        if (it->ripeRate_ >= size || new_position[it->ripeRate_] >= size) {
-            //cout << "ripeRate_ > size" << endl;
+        if (it->ripeRate_ >= size || new_position_inorder[it->ripeRate_] >= size) { // need to delete second condition cant happen
             continue;
         }
         else {
-            ripe_rate_fuitID[new_position[it->ripeRate_]] = it->key_;
-            ripe_rate_fuitID_rr[new_position[it->ripeRate_]] = it->ripeRate_;
+            ripe_rate_fruitID_sorted[new_position_inorder[it->ripeRate_]] = it->key_;
+            ripe_rate_fruitID_rr_sorted[new_position_inorder[it->ripeRate_]] = it->ripeRate_;
         }
-        ++new_position[it->ripeRate_];
+        ++new_position_inorder[it->ripeRate_];
     }
 
+    if (sum_prev_nodes == size) {
+        delete[] ripe_rate_counter;
+        delete[] new_position_inorder;
+        delete[] ripe_rate_fruitID_rr_sorted;
+        *fruits = ripe_rate_fruitID_sorted;
+        *numOffFruits = size;
+        return SUCCESS;
+    }
     //-------------------------- this is for all ripe rate > size(k) ------------------------------------------
     for (int i = 0; i < size; ++i) {
-        ripe_rate[i] = 0;
-        new_position[i] = 0;
+        ripe_rate_counter[i] = 0;
+        new_position_inorder[i] = 0;
     }
 
-    int last_pos = sum_prev_nodes;
-    if (tree_node->tree_->BestRipeRateNode() == nullptr) {
-        cout << "nullptr" << endl;
-        return FAILURE;
-    }
+    const int new_first_position = sum_prev_nodes;
+    // need to move to the beginning of the function or to be deleted
+    //if (tree_node->tree_->FindBestRipeRateNode() == nullptr) {
+    //    cout << "nullptr" << endl;
+    //    return FAILURE;
+    //}
 
-    int max_rr = tree_node->tree_->BestRipeRateNode()->ripeRate_;
+    // change best ripe rate to worst_ and no need to call this function it check again all fruit in this tree
+    int max_rr = tree_node->tree_->FindBestRipeRateNode()->ripeRate_;
     for (auto it : *tree_node->tree_) {
         if (it->ripeRate_ > max_rr)
             max_rr = it->ripeRate_;
     }    
 
-    //cout << "----------------------------------------" << endl;
-    //cout << "max rr = " << max_rr << endl;
-    //cout << "size = " << size << endl;
-    //cout << "last_pos = " << last_pos << endl;
-    //cout << "----------------------------------------" << endl;
-
-    int dx = ceil(double(max_rr - size) / (size - last_pos));
-    //cout << "dx = " << dx << endl;
+    int dx = int(ceil(double(max_rr - size) / (size - new_first_position)));
 
     for (auto it : *tree_node->tree_) {
         if (it->ripeRate_ >= size) {
-            int new_pos = double(it->ripeRate_ - size) / dx;
-            if (new_pos >= size - last_pos)
-                new_pos = size - last_pos - 1;
+            int new_pos = int(double(it->ripeRate_ - size) / dx);
+            if (new_first_position + new_pos >= size)
+                new_pos = size - new_first_position - 1;
 
-            ++ripe_rate[last_pos + new_pos];
+            ++ripe_rate_counter[new_first_position + new_pos];
         }
     }
 
-    ////"----------------------------------------"
-    //cout << "ripe rate before changes:" << endl;
-    //for (int i = 0; i < size; ++i)
-    //    cout << ripe_rate[i] << " ";
-    //cout << endl;
-    ////"----------------------------------------"
-
     for (int i = sum_prev_nodes; i < size; ++i) {
-        if (ripe_rate[i] == 0)
+        if (ripe_rate_counter[i] == 0)
             continue;
 
-        new_position[i] = sum_prev_nodes;
-        sum_prev_nodes += ripe_rate[i];
+        new_position_inorder[i] = sum_prev_nodes;
+        sum_prev_nodes += ripe_rate_counter[i];
     }
 
-    ////"----------------------------------------"
-    //cout << "new_position after changes:" << endl;
-    //for (int i = 0; i < size; ++i)
-    //    cout << new_position[i] << " ";
-    //cout << endl;
-    ////"----------------------------------------"
     for (auto it : *tree_node->tree_) {
         if (it->ripeRate_ < size )
             continue;        
 
-        int new_pos = double(it->ripeRate_ - size) / dx;
-        //cout << "new_pos = " << new_pos << endl;
-        if (new_pos >= size - last_pos)
-            new_pos = size - last_pos - 1;
-        //cout << "new_pos = " << new_pos << endl;
+        int new_pos = int(double(it->ripeRate_ - size) / dx);
+        if (new_first_position + new_pos >= size)
+            new_pos = size - new_first_position - 1;
 
-        ripe_rate_fuitID[new_position[last_pos + new_pos]] = it->key_;
-        ripe_rate_fuitID_rr[new_position[last_pos + new_pos]] = it->ripeRate_;
+        if (new_position_inorder[new_first_position + new_pos] == size)
+            cout << "---------------------------------------------------------------------------"
+            " --------------------------------------------------------------------" << endl;
 
-        ++new_position[last_pos + new_pos];
+        ripe_rate_fruitID_sorted[new_position_inorder[new_first_position + new_pos]] = it->key_;
+        ripe_rate_fruitID_rr_sorted[new_position_inorder[new_first_position + new_pos]] = it->ripeRate_;
+
+        ++new_position_inorder[new_first_position + new_pos];
     }
 
     //"----------------------------------------"
-    cout << "ripe_rate_fuitID_rr after changes:" << endl;
+    cout << "ripe_rate_fruitID_rr_sorted after changes:" << endl;
     for (int i = 0; i < size; ++i)
-        cout << ripe_rate_fuitID_rr[i] << " ";
+        cout << ripe_rate_fruitID_rr_sorted[i] << " ";
     cout << endl;
     //"----------------------------------------"
 
-
-    delete[] ripe_rate;
-    delete[] new_position;
-    delete[] ripe_rate_fuitID_rr;
-    *fruits = ripe_rate_fuitID;
+    delete[] ripe_rate_counter;
+    delete[] new_position_inorder;
+    delete[] ripe_rate_fruitID_rr_sorted;
+    *fruits = ripe_rate_fruitID_sorted;
     *numOffFruits = size;
     return SUCCESS;
 }
@@ -367,7 +342,7 @@ StatusType Statistics::UpdateRottenFruits(int rottenBase, int rottenFactor) {
     } while (fruit != Fruits_ll_->Front());
 
     for (auto it : *Plantation_tree_) {
-        it->tree_->BestRipeRateNode();
+        it->tree_->FindBestRipeRateNode();
     }
 
     return SUCCESS;

@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="FinalProject_DS-Algorithms.cpp" />
     <ClCompile Include="library1.cpp" />
+    <ClCompile Include="counting_sort.cpp" />
     <ClCompile Include="tree.cpp" />
     <ClCompile Include="Statistics.cpp" />
   </ItemGroup>

@@ -15,7 +15,8 @@ class Tree
         Tree(int treeID, LinkedListExtraData* ll) :
             treeID_(treeID), isEmpty_(true), tree_size_(0), linkedlist_(ll),
             root_(nullptr), lowest_node_(nullptr), highest_node_(nullptr),
-            lowest_ripe_rate_(0), highest_ripe_rate_(0), lowest_ripe_rate_node_(nullptr)
+            //lowest_ripe_rate_(0), highest_ripe_rate_(0),
+            lowest_ripe_rate_node_(nullptr), highest_ripe_rate_node_(nullptr)
         {}
 
         virtual ~Tree() = default;
@@ -128,7 +129,7 @@ class Tree
             }
 
             BalanceTree(parent);
-            BestRipeRateNode();
+            FindBestRipeRateNode();
 
             return;
         }
@@ -335,22 +336,22 @@ class Tree
             cout << "----------------------" << endl;
         }
 
-        Node* BestRipeRateNode();
-
+        Node* FindBestRipeRateNode();
         int treeID_;
 
     private:
         bool isEmpty_;
-        int tree_size_;
+        unsigned int tree_size_;
 
         LinkedListExtraData* linkedlist_;
         Node* root_;
         Node* lowest_node_;
         Node* highest_node_;
 
-        int lowest_ripe_rate_;
-        int highest_ripe_rate_;
-        Node* lowest_ripe_rate_node_;
+        //int lowest_ripe_rate_;            // not yet used
+        //int highest_ripe_rate_;           // not yet used
+        Node* lowest_ripe_rate_node_;       // not yet used
+        Node* highest_ripe_rate_node_;      // not yet used
 };
 
 
