@@ -337,6 +337,7 @@ class Tree
         }
 
         Node* FindBestRipeRateNode();
+        Node* FindWorstRipeRateNode();
         int treeID_;
 
     private:
@@ -348,6 +349,7 @@ class Tree
         Node* lowest_node_;
         Node* highest_node_;
 
+    public:
         //int lowest_ripe_rate_;            // not yet used
         //int highest_ripe_rate_;           // not yet used
         Node* lowest_ripe_rate_node_;       // not yet used

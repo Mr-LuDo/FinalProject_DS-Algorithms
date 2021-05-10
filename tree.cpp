@@ -151,5 +151,20 @@ Node* Tree::FindBestRipeRateNode() {
         if (it->ripeRate_ < best_ripe_rate_node->ripeRate_)
             best_ripe_rate_node = it;
     }
-    return best_ripe_rate_node;
+    return lowest_ripe_rate_node_ = best_ripe_rate_node;
+}
+
+Node* Tree::FindWorstRipeRateNode() {
+
+    Node* worst_ripe_rate_node = lowest_node_;
+    if (worst_ripe_rate_node == nullptr) {
+        cout << "best_ripe_rate_node == nullptr";
+        return nullptr;
+    }
+
+    for (auto it : *this) {
+        if (it->ripeRate_ > worst_ripe_rate_node->ripeRate_)
+            worst_ripe_rate_node = it;
+    }
+    return highest_ripe_rate_node_ = worst_ripe_rate_node;
 }

@@ -1,4 +1,6 @@
 #include "Statistics.h"
+//#include "Counting_sort.cpp"
+void RedixSort(Tree* tree, Node** fruits);
 
 //class DataStructure;
 class LinkedListExtraData;
@@ -139,6 +141,7 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         *numOffFruits = size;
         return SUCCESS;
     }
+
     if (size == 1) {
         *fruits = new int[size];
         **fruits = tree_node->tree_->FindBestRipeRateNode()->key_;
@@ -147,124 +150,39 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
     }
     // ----------------------------------------------------------------------------------
 
-    int* ripe_rate_counter = new int[size]();
-    int* new_position_inorder = new int[size]();
-    int* ripe_rate_fruitID_sorted = new int[size]();
-    int* ripe_rate_fruitID_rr_sorted = new int[size]();
+    Node** fruits_array = new Node*[size];
+    int pos = 0;
+    for (auto it : *tree_node->tree_) {
+        
+        fruits_array[pos] = it;
+        ++pos;
+    }
 
     //for (int i = 0; i < size; ++i) {
-    //    ripe_rate_counter[i] = 0;
-    //    new_position_inorder[i] = 0;
-    //    ripe_rate_fruitID_sorted[i] = 0;
-    //    ripe_rate_fruitID_rr_sorted[i] = 0;
+    //    cout << fruits_array[i]->key_ << " ";
     //}
-    
-    // ---------------- counting how many same ripe rate ---------------------------------
-    for (auto it : *tree_node->tree_) {
-        if (it->ripeRate_ >= size)
-            continue;
-        ++ripe_rate_counter[it->ripeRate_];
-    }
+    //cout << endl;
+    //for (int i = 0; i < size; ++i) {
+    //    cout << fruits_array[i]->ripeRate_ << " ";
+    //}
+    //cout << endl;
 
-    // -- rerouting each ripe rate according to its position (fruitID) and how many repetitions of ripe rate ---
-    int sum_prev_nodes = 0;
-    for (int i = 1; i < size; ++i) {
-        if (ripe_rate_counter[i] == 0)
-            continue;
+    RedixSort(tree_node->tree_, fruits_array);
 
-        new_position_inorder[i] = sum_prev_nodes;
-        sum_prev_nodes += ripe_rate_counter[i];
-    }
-
-    // -- setting fruits in there new position (in ordered) - for now only those which ripe rate < K_tree - because of the memory limitation ---
-    for (auto it : *tree_node->tree_) {
-        if (it->ripeRate_ >= size || new_position_inorder[it->ripeRate_] >= size) { // need to delete second condition cant happen
-            continue;
-        }
-        else {
-            ripe_rate_fruitID_sorted[new_position_inorder[it->ripeRate_]] = it->key_;
-            ripe_rate_fruitID_rr_sorted[new_position_inorder[it->ripeRate_]] = it->ripeRate_;
-        }
-        ++new_position_inorder[it->ripeRate_];
-    }
-
-    if (sum_prev_nodes == size) {
-        delete[] ripe_rate_counter;
-        delete[] new_position_inorder;
-        delete[] ripe_rate_fruitID_rr_sorted;
-        *fruits = ripe_rate_fruitID_sorted;
-        *numOffFruits = size;
-        return SUCCESS;
-    }
-    //-------------------------- this is for all ripe rate > size(k) ------------------------------------------
+    *fruits = new int[size];
     for (int i = 0; i < size; ++i) {
-        ripe_rate_counter[i] = 0;
-        new_position_inorder[i] = 0;
+        (*fruits)[i] = fruits_array[i]->key_;
     }
-
-    const int new_first_position = sum_prev_nodes;
-    // need to move to the beginning of the function or to be deleted
-    //if (tree_node->tree_->FindBestRipeRateNode() == nullptr) {
-    //    cout << "nullptr" << endl;
-    //    return FAILURE;
-    //}
-
-    // change best ripe rate to worst_ and no need to call this function it check again all fruit in this tree
-    int max_rr = tree_node->tree_->FindBestRipeRateNode()->ripeRate_;
-    for (auto it : *tree_node->tree_) {
-        if (it->ripeRate_ > max_rr)
-            max_rr = it->ripeRate_;
-    }    
-
-    int dx = int(ceil(double(max_rr - size) / (size - new_first_position)));
-
-    for (auto it : *tree_node->tree_) {
-        if (it->ripeRate_ >= size) {
-            int new_pos = int(double(it->ripeRate_ - size) / dx);
-            if (new_first_position + new_pos >= size)
-                new_pos = size - new_first_position - 1;
-
-            ++ripe_rate_counter[new_first_position + new_pos];
-        }
-    }
-
-    for (int i = sum_prev_nodes; i < size; ++i) {
-        if (ripe_rate_counter[i] == 0)
-            continue;
-
-        new_position_inorder[i] = sum_prev_nodes;
-        sum_prev_nodes += ripe_rate_counter[i];
-    }
-
-    for (auto it : *tree_node->tree_) {
-        if (it->ripeRate_ < size )
-            continue;        
-
-        int new_pos = int(double(it->ripeRate_ - size) / dx);
-        if (new_first_position + new_pos >= size)
-            new_pos = size - new_first_position - 1;
-
-        if (new_position_inorder[new_first_position + new_pos] == size)
-            cout << "---------------------------------------------------------------------------"
-            " --------------------------------------------------------------------" << endl;
-
-        ripe_rate_fruitID_sorted[new_position_inorder[new_first_position + new_pos]] = it->key_;
-        ripe_rate_fruitID_rr_sorted[new_position_inorder[new_first_position + new_pos]] = it->ripeRate_;
-
-        ++new_position_inorder[new_first_position + new_pos];
-    }
-
-    //"----------------------------------------"
-    cout << "ripe_rate_fruitID_rr_sorted after changes:" << endl;
-    for (int i = 0; i < size; ++i)
-        cout << ripe_rate_fruitID_rr_sorted[i] << " ";
     cout << endl;
-    //"----------------------------------------"
+     
+    ////"----------------------------------------"
+    //cout << "key_fruitID_rr_sorted after changes:" << endl;
+    //for (int i = 0; i < size; ++i)
+    //    cout << fruits_array[i]->ripeRate_ << " ";
+    //cout << endl;
+    ////"----------------------------------------"
 
-    delete[] ripe_rate_counter;
-    delete[] new_position_inorder;
-    delete[] ripe_rate_fruitID_rr_sorted;
-    *fruits = ripe_rate_fruitID_sorted;
+   // *fruits = ripe_rate_fruitID_sorted;
     *numOffFruits = size;
     return SUCCESS;
 }
@@ -383,3 +301,105 @@ int Statistics::TreeID(int i, int j) {
     return i * Plantation_size_ + j;
 }
 
+
+
+
+void CountingSort(Node** fruits, int* nodes_rr_digits, int size) {
+
+    const int TEN = 10;
+
+    int* nodes_digit = new int[size]();
+    int* temp_nodes_rr_digits = new int[size]();
+    int* ripe_rate_counter = new int[TEN]();
+    int* new_position_inorder = new int[TEN]();
+    Node** temp_fruits = new Node*[size];
+
+    // copy to temp array fruits by their order
+    for (int i = 0; i < size; ++i) {
+        temp_fruits[i] = fruits[i];
+    }
+
+    // retrieving the digit
+    for (int i = 0; i < size; ++i) {
+        nodes_digit[i] = nodes_rr_digits[i] % 10;
+        nodes_rr_digits[i] /= 10;
+        temp_nodes_rr_digits[i] = nodes_rr_digits[i];
+    }
+    
+    //for (int i = 0; i < size; ++i) {
+    //    cout << nodes_digit[i] << " ";
+    //}
+    //cout << endl;
+    
+    // ---------------- counting how many have the same ripe rate ---------------------------------
+    for (int i = 0; i < size; ++i) {
+        ++ripe_rate_counter[nodes_digit[i]];
+    }
+
+    // -- rerouting each ripe rate according to its position (fruitID) and how many repetitions of ripe rate ---
+    int sum_prev_nodes = 0;
+    for (int i = 0; i < TEN; ++i) {
+        if (ripe_rate_counter[i] == 0)
+            continue;
+
+        new_position_inorder[i] = sum_prev_nodes;
+        sum_prev_nodes += ripe_rate_counter[i];
+    }
+
+    //cout << "before:" << endl;
+    //for (int i = 0; i < size; ++i) {
+    //    cout << temp_fruits[i]->ripeRate_ << " ";
+    //}
+    //cout << endl;
+
+
+    // -- setting fruits in there new position (in ordered) - for now only those which ripe rate < K_tree - because of the memory limitation ---
+    for (int i = 0; i < size; ++i) {
+        int temp_digit = nodes_digit[i];
+
+        fruits[new_position_inorder[nodes_digit[i]]] = temp_fruits[i];
+        nodes_rr_digits[new_position_inorder[nodes_digit[i]]] = temp_nodes_rr_digits[i];
+        ++new_position_inorder[nodes_digit[i]];
+
+    }
+
+    //cout << "after:" << endl;
+    //for (int i = 0; i < size; ++i) {
+    //    cout << fruits[i]->ripeRate_ << " ";
+    //}
+    //cout << endl;
+
+    delete[] nodes_digit;
+    delete[] temp_nodes_rr_digits;
+    delete[] ripe_rate_counter;
+    delete[] new_position_inorder;
+    delete[] temp_fruits;
+
+    return;
+}
+
+void RedixSort(Tree* tree, Node** fruits) {
+
+    tree->FindBestRipeRateNode();
+    tree->FindWorstRipeRateNode();
+    int temp = tree->highest_ripe_rate_node_->ripeRate_;
+    int numOffFruits = tree->size();
+
+    int num_of_digits = 0;
+    while (temp) {
+        ++num_of_digits;
+        temp /= 10;
+    }
+
+    int* nodes_rr_digits = new int[numOffFruits]();
+    for (int j = 0; j < numOffFruits; ++j) {
+        nodes_rr_digits[j] = fruits[j]->ripeRate_;
+    }
+
+    for (int i = 0; i < num_of_digits; ++i) {
+        CountingSort(fruits, nodes_rr_digits, numOffFruits);
+    }
+
+    delete[] nodes_rr_digits;
+    return;
+}
