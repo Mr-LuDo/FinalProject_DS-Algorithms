@@ -24,7 +24,6 @@ class Node {
 
         void PrintNode() {
             cout << "------------- PrintNode ----------------" << endl;
-
             cout << "key data: " <<endl;
             cout << "key_         = " << key_ << endl;
             cout << "linkedlist_  = " << linkedlist_ << endl;
@@ -45,7 +44,6 @@ class Node {
             cout << "height_         = " << height_ << endl;
             cout << "balance_factor_ = " << balance_factor_ << endl;
             cout << "------------- End PrintNode ----------------" << endl;
-
         }
 
     // linked list 

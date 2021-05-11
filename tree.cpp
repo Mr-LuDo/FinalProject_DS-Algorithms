@@ -139,32 +139,28 @@ void Tree::RightRotation(Node* node) {
     }
 }
 
-Node* Tree::FindBestRipeRateNode() {
+void Tree::UpdateBestAndWorstRipeRateNodes() {
+    lowest_ripe_rate_node_ = lowest_node_;
+    highest_ripe_rate_node_ = lowest_node_;
 
-    Node* best_ripe_rate_node = lowest_node_;
-    if (best_ripe_rate_node == nullptr) {
-        cout << "best_ripe_rate_node == nullptr";
-        return nullptr;
-    }
+    if (lowest_ripe_rate_node_ == nullptr)
+        return;
 
     for (auto it : *this) {
-        if (it->ripeRate_ < best_ripe_rate_node->ripeRate_)
-            best_ripe_rate_node = it;
+        if (it->ripeRate_ < lowest_ripe_rate_node_->ripeRate_)
+            lowest_ripe_rate_node_ = it;
+        if (it->ripeRate_ > highest_ripe_rate_node_->ripeRate_)
+            highest_ripe_rate_node_ = it;
     }
-    return lowest_ripe_rate_node_ = best_ripe_rate_node;
+    return;
+}
+
+Node* Tree::FindBestRipeRateNode() {
+    UpdateBestAndWorstRipeRateNodes();
+    return lowest_ripe_rate_node_;
 }
 
 Node* Tree::FindWorstRipeRateNode() {
-
-    Node* worst_ripe_rate_node = lowest_node_;
-    if (worst_ripe_rate_node == nullptr) {
-        cout << "best_ripe_rate_node == nullptr";
-        return nullptr;
-    }
-
-    for (auto it : *this) {
-        if (it->ripeRate_ > worst_ripe_rate_node->ripeRate_)
-            worst_ripe_rate_node = it;
-    }
-    return highest_ripe_rate_node_ = worst_ripe_rate_node;
+    UpdateBestAndWorstRipeRateNodes();
+    return highest_ripe_rate_node_;
 }

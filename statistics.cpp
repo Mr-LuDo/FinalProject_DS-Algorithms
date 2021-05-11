@@ -148,24 +148,15 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         *numOffFruits = size;
         return SUCCESS;
     }
+
     // ----------------------------------------------------------------------------------
 
     Node** fruits_array = new Node*[size];
     int pos = 0;
     for (auto it : *tree_node->tree_) {
-        
         fruits_array[pos] = it;
         ++pos;
     }
-
-    //for (int i = 0; i < size; ++i) {
-    //    cout << fruits_array[i]->key_ << " ";
-    //}
-    //cout << endl;
-    //for (int i = 0; i < size; ++i) {
-    //    cout << fruits_array[i]->ripeRate_ << " ";
-    //}
-    //cout << endl;
 
     RedixSort(tree_node->tree_, fruits_array);
 
@@ -173,16 +164,7 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
     for (int i = 0; i < size; ++i) {
         (*fruits)[i] = fruits_array[i]->key_;
     }
-    cout << endl;
-     
-    ////"----------------------------------------"
-    //cout << "key_fruitID_rr_sorted after changes:" << endl;
-    //for (int i = 0; i < size; ++i)
-    //    cout << fruits_array[i]->ripeRate_ << " ";
-    //cout << endl;
-    ////"----------------------------------------"
 
-   // *fruits = ripe_rate_fruitID_sorted;
     *numOffFruits = size;
     return SUCCESS;
 }
@@ -380,9 +362,7 @@ void CountingSort(Node** fruits, int* nodes_rr_digits, int size) {
 
 void RedixSort(Tree* tree, Node** fruits) {
 
-    tree->FindBestRipeRateNode();
-    tree->FindWorstRipeRateNode();
-    int temp = tree->highest_ripe_rate_node_->ripeRate_;
+    int temp = tree->FindWorstRipeRateNode()->ripeRate_;
     int numOffFruits = tree->size();
 
     int num_of_digits = 0;

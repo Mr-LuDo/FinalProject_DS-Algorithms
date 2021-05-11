@@ -15,7 +15,6 @@ class Tree
         Tree(int treeID, LinkedListExtraData* ll) :
             treeID_(treeID), isEmpty_(true), tree_size_(0), linkedlist_(ll),
             root_(nullptr), lowest_node_(nullptr), highest_node_(nullptr),
-            //lowest_ripe_rate_(0), highest_ripe_rate_(0),
             lowest_ripe_rate_node_(nullptr), highest_ripe_rate_node_(nullptr)
         {}
 
@@ -338,9 +337,12 @@ class Tree
 
         Node* FindBestRipeRateNode();
         Node* FindWorstRipeRateNode();
+        void UpdateBestAndWorstRipeRateNodes();    
+
         int treeID_;
 
     private:
+
         bool isEmpty_;
         unsigned int tree_size_;
 
@@ -349,11 +351,8 @@ class Tree
         Node* lowest_node_;
         Node* highest_node_;
 
-    public:
-        //int lowest_ripe_rate_;            // not yet used
-        //int highest_ripe_rate_;           // not yet used
-        Node* lowest_ripe_rate_node_;       // not yet used
-        Node* highest_ripe_rate_node_;      // not yet used
+        Node* lowest_ripe_rate_node_;       
+        Node* highest_ripe_rate_node_;     
 };
 
 
