@@ -62,7 +62,7 @@ void CountingSort(Node** fruits, int* nodes_rr_digits, int size) {
     return;
 }
 
-void RedixSort(Tree* tree, Node** fruits) {
+void RadixSort(Tree* tree, Node** fruits) {
 
     int temp = tree->highest_ripe_rate_node_->ripeRate_;
     int numOffFruits = tree->size();

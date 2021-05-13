@@ -30,7 +30,6 @@ class Tree
             temp_node->ripeRate_ = ripe_rate;
 
             if(isEmpty_) {
-                //cout << "tree is empty" << endl;
                 isEmpty_ = false;
                 ++tree_size_;
                 root_ = lowest_node_ = highest_node_ = temp_node;
@@ -38,10 +37,9 @@ class Tree
             }
             else {
                 Node* pos = findPos(key);
-                if(pos == temp_node) {
-                    //cout << "key already exist" << endl;
+                if(pos == temp_node)
                     return pos;
-                }
+                
                 if(key < pos->key_) {
                     if(UpdateLeft(pos, temp_node))
                         ++tree_size_;
@@ -56,13 +54,7 @@ class Tree
                 }
             }
             BalanceTree(temp_node);
-
-            if (lowest_ripe_rate_node_ == nullptr)
-                lowest_ripe_rate_node_ = temp_node;
-            else {
-                if (temp_node->ripeRate_ < lowest_ripe_rate_node_->ripeRate_)
-                    lowest_ripe_rate_node_ = temp_node;
-            }
+            UpdateBestAndWorstRipeRateNodes();
 
             return temp_node;
         }
@@ -109,7 +101,7 @@ class Tree
         
         void DeleteNode(Node* node) {
             Node* parent = node->parent_tree_;
-            
+
             if (node->left_tree_ == nullptr && node->right_tree_ == nullptr) {
                 DeleteLeaf(node);
             }
@@ -118,7 +110,6 @@ class Tree
                     DeleteNodeWithOnechild(node);
                 }
                 else {
-                    //cout << "swap" << endl;
                     SwapNodes(*node, *Next(node));
                     if (node->left_tree_ == nullptr && node->right_tree_ == nullptr)
                         DeleteLeaf(node);
@@ -128,7 +119,7 @@ class Tree
             }
 
             BalanceTree(parent);
-            FindBestRipeRateNode();
+            UpdateBestAndWorstRipeRateNodes();
 
             return;
         }
@@ -335,8 +326,8 @@ class Tree
             cout << "----------------------" << endl;
         }
 
-        Node* FindBestRipeRateNode();
-        Node* FindWorstRipeRateNode();
+        Node* BestRipeRateNode();
+        Node* WorstRipeRateNode();
         void UpdateBestAndWorstRipeRateNodes();    
 
         int treeID_;

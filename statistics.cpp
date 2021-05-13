@@ -1,6 +1,6 @@
 #include "Statistics.h"
 //#include "Counting_sort.cpp"
-void RedixSort(Tree* tree, Node** fruits);
+void RadixSort(Tree* tree, Node** fruits);
 
 //class DataStructure;
 class LinkedListExtraData;
@@ -21,13 +21,13 @@ Statistics::~Statistics() {
     return;
 }
 
-void Statistics::Init(int N) {
+void* Statistics::Init(int N) {
     Plantation_ll_ = new LinkedListExtraData;
     Plantation_tree_ = new Tree(-1, Plantation_ll_);
     Plantation_size_ = N;
     Fruits_ll_ = new LinkedListExtraData;
     
-    return;
+    return this;
 }
 
 StatusType Statistics::PlantTree(int i, int j) {
@@ -36,16 +36,10 @@ StatusType Statistics::PlantTree(int i, int j) {
 
     int treeID = TreeID(i, j);
     Node* tree_node = Plantation_tree_->AddNode(treeID, NULL);
-    if (tree_node == nullptr) {
-        //cout << "tree node == nullptr " << endl;
+    if (tree_node == nullptr)
         return FAILURE;
-    }
-    tree_node->tree_ = new Tree(treeID, Fruits_ll_);
-    //tree_node->PrintNode();
-    //cout << "--------------- tree_node->tree_->PrintTreeData() --------------" << endl;
-    //tree_node->tree_->PrintTreeData();
-    //cout << "--------------- --------------------------------- --------------" << endl;
 
+    tree_node->tree_ = new Tree(treeID, Fruits_ll_);
     return SUCCESS;
 }
 
@@ -59,15 +53,11 @@ StatusType Statistics::AddFruit(int i, int j, int fruitID, int ripeRate) {
         return FAILURE;
 
     Node* temp = tree_node->tree_->AddNode(fruitID, ripeRate);
-    if (temp == nullptr) {
-        //cout << "temp node == nullptr " << endl;
+    if (temp == nullptr)
         return FAILURE;
-    }
+    
     if (temp->key_ != fruitID)
         return FAILURE;
-    //cout << "--------------- print node --------------" << endl;
-    //temp->PrintNode();
-    //cout << "--------------- ---------- --------------" << endl;
 
     return SUCCESS;
 }
@@ -93,6 +83,7 @@ StatusType Statistics::RateFruit(int fruitID, int ripeRate) {
         return FAILURE;
 
     fruit->ripeRate_ = ripeRate;
+    fruit->tree_->UpdateBestAndWorstRipeRateNodes();
     return SUCCESS;
 }
 
@@ -115,8 +106,7 @@ StatusType Statistics::GetBestFruit(int i, int j, int* fruitID) {
         return FAILURE;
     }
 
-    Node* best_fruit = tree_node->tree_->FindBestRipeRateNode();
-    *fruitID = best_fruit->key_;
+    *fruitID = tree_node->tree_->BestRipeRateNode()->key_;
     return SUCCESS;
 }
 
@@ -144,7 +134,7 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
 
     if (size == 1) {
         *fruits = new int[size];
-        **fruits = tree_node->tree_->FindBestRipeRateNode()->key_;
+        **fruits = tree_node->tree_->BestRipeRateNode()->key_;
         *numOffFruits = size;
         return SUCCESS;
     }
@@ -158,7 +148,7 @@ StatusType Statistics::GetAllFruitsByRate(int i, int j, int** fruits, int* numOf
         ++pos;
     }
 
-    RedixSort(tree_node->tree_, fruits_array);
+    RadixSort(tree_node->tree_, fruits_array);
 
     *fruits = new int[size];
     for (int i = 0; i < size; ++i) {
@@ -233,18 +223,22 @@ StatusType Statistics::UpdateRottenFruits(int rottenBase, int rottenFactor) {
     if (rottenBase < 1 || rottenFactor < 1)
         return INVALID_INPUT; 
 
+    bool* updated_trees = new bool[Plantation_tree_->size()]();
     Node* fruit = Fruits_ll_->Front();
     do {
         if (fruit->key_ % rottenBase == 0) {
             fruit->ripeRate_ *= rottenFactor;
+            updated_trees[fruit->treeID_] = true;
         }
         fruit = Fruits_ll_->Next(fruit);
     } while (fruit != Fruits_ll_->Front());
 
     for (auto it : *Plantation_tree_) {
-        it->tree_->FindBestRipeRateNode();
+        if (updated_trees[it->treeID_] == true)
+            it->tree_->UpdateBestAndWorstRipeRateNodes();
     }
 
+    delete[] updated_trees;
     return SUCCESS;
 }
 
@@ -360,9 +354,9 @@ void CountingSort(Node** fruits, int* nodes_rr_digits, int size) {
     return;
 }
 
-void RedixSort(Tree* tree, Node** fruits) {
+void RadixSort(Tree* tree, Node** fruits) {
 
-    int temp = tree->FindWorstRipeRateNode()->ripeRate_;
+    int temp = tree->WorstRipeRateNode()->ripeRate_;
     int numOffFruits = tree->size();
 
     int num_of_digits = 0;

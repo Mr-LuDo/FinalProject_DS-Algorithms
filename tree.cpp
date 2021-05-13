@@ -139,6 +139,7 @@ void Tree::RightRotation(Node* node) {
     }
 }
 
+
 void Tree::UpdateBestAndWorstRipeRateNodes() {
     lowest_ripe_rate_node_ = lowest_node_;
     highest_ripe_rate_node_ = lowest_node_;
@@ -155,12 +156,12 @@ void Tree::UpdateBestAndWorstRipeRateNodes() {
     return;
 }
 
-Node* Tree::FindBestRipeRateNode() {
-    UpdateBestAndWorstRipeRateNodes();
+Node* Tree::BestRipeRateNode() {
+    //UpdateBestAndWorstRipeRateNodes();
     return lowest_ripe_rate_node_;
 }
 
-Node* Tree::FindWorstRipeRateNode() {
-    UpdateBestAndWorstRipeRateNodes();
+Node* Tree::WorstRipeRateNode() {
+    //UpdateBestAndWorstRipeRateNodes();
     return highest_ripe_rate_node_;
 }
