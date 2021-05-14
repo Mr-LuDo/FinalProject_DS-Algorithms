@@ -2,9 +2,8 @@
 #define LINKEDLIST_H
 
 #include <iostream>
-using namespace std;
-
-//#include <memory>
+using std::cout;
+using std::endl;
 
 #include "Node.h"
 
@@ -38,20 +37,15 @@ class LinkedListExtraData : public LinkedList
 
         virtual ~LinkedListExtraData() override {
             while (size_) {
-                //cout << "ll deleting size = " << size() << endl;
-                //PrintLinkedList();
                 PopFront();
             }
-            //cout << "ll deleted all" << endl;
         }
 
         bool PushFront(const int& key, int treeID, Tree* tree) {
             if(Search(key) != nullptr) {
-                //cout << "key already exist, no action were taken." << endl;
                 return false;
             }
             PushFront(key);
-            first_node_->treeID_ = treeID;
             first_node_->tree_ = tree;
             return true;
         }
@@ -149,9 +143,6 @@ class LinkedListExtraData : public LinkedList
             }
             delete node;
             --size_;
-            //cout << "deleted last node, size : " << size() << endl;
-            //cout << "first_node_ : " << first_node_ << endl;
-            //cout << "last_node_ : " << last_node_ << endl;
         }
 
         Node* Next(Node* node)      { return node->ll_next_;     }
@@ -187,183 +178,6 @@ class LinkedListExtraData : public LinkedList
         size_t size_;
 
 };
-
-
-
-// ---------------------------------- UnidirectionalLinkedList ---------------------------------------------------
-
-/*
-
-template <typename T>
-class UnidirectionalLinkedList : public LinkedList<T> {
- public:
-  class IllegalAccess{};
-  class Unimplemented{};
-  class Node;
-
-  UnidirectionalLinkedList() {}
-  ~UnidirectionalLinkedList() override {}
-
-  void PushFront(const T& data) {
-    size_++;
-    auto new_node = std::make_unique<ListNode>(data);
-    new_node->next_ = std::move(root_->next_);
-    root_->next_ = std::move(new_node);
-    if (size_ == 1) last_ = root_->next_.get();
-  }
-
-  void PushBack(const T& data) override {
-    if (size_ == 0) {
-      PushFront(data);
-      return;
-    }
-    size_++;
-    auto new_node = std::make_unique<ListNode>(data);
-    new_node->next_ = std::move(root_->next_);
-    last_->next_ = std::move(new_node);
-    last_ = last_->next_.get();
-
-  }
-
-  const T& Back() const override {
-    if (last_ == nullptr) throw typename LinkedList<T>::IllegalAccess();
-    return last_->value_;
-  }
-
-  const T& Front() const override {
-    if (root_->next_ == nullptr) throw typename LinkedList<T>::IllegalAccess();
-    return root_->next_->value_;
-  }
-
-  const void PopBack() override {
-      throw typename LinkedList<T>::Unimplemented();
-  }
-
-  const void PopFront() override {
-    if (!root_->next_) return;
-    std::unique_ptr<ListNode> tmp = std::move(root_->next_);
-    root_->next_ = std::move(tmp->next_);
-    --size_;
-    if (size_ == 0) {
-      last_ = nullptr;
-    }
-  }
-
-  size_t size() const override { return size_; }
-
- private:
-  struct ListNode {
-    ListNode(const T& value = 0) : value_(value) {}
-    T value_;
-    std::unique_ptr<ListNode> next_;
-  };
-  std::unique_ptr<ListNode> root_ = std::make_unique<ListNode>();
-  ListNode* last_ = nullptr;
-  size_t size_ = 0;
-
-};
-
-
-// ---------------------------------- BidirectionalLinkedList ---------------------------------------------------
-
-
-
-template <typename T>
-class BidirectionalLinkedList : public LinkedList<T> {
- public:
-
-//   class ListNode;
-
-  BidirectionalLinkedList() {
-    root_.next_ = &root_;
-    root_.prev_ = &root_;
-  }
-  ~BidirectionalLinkedList() override {
-    ListNode *next = root_.next_;
-    for (size_t i = 0; i < size_; ++i) {
-      next = next->next_;
-      delete next->prev_;
-    }
-  }
-
-//  void PushFront(const T& data) override {
-//    auto* node = new ListNode(data);
-//    node->next_ = root_.next_;
-//    root_.next_ = node;
-//    node->prev_ = &root_;
-//    node->next_->prev_ = node;
-//    ++size_;
-//  }
-
-  void PushFront(const T& data) override {
-    auto* node = new ListNode(data);
-    node->next_ = root_.next_;
-    root_.next_ = node;
-    node->prev_ = &root_;
-    node->next_->prev_ = node;
-    ++size_;
-  }
-
-  void PushBack(const T& data) override {
-    auto* node = new ListNode(data);
-    node->prev_ = root_.prev_;
-    root_.prev_ = node;
-    node->next_ = &root_;
-    node->prev_->next_ = node;
-    ++size_;
-  }
-
-
-  const T& Front() const override {
-    if (size_ == 0)  throw typename LinkedList<T>::IllegalAccess();
-    return root_.next_->value_;
-  }
-
-  const T& Back() const override {
-    if (size_ == 0)  throw typename LinkedList<T>::IllegalAccess();
-    return root_.prev_->value_;
-  }
-
-  const void PopFront() override {
-    if (size_ == 0)  throw typename LinkedList<T>::IllegalAccess();
-    std::unique_ptr<ListNode> tmp(root_.next_);
-    root_.next_ = tmp->next_;
-    tmp->next_->prev_ = &root_;
-    --size_;
-  }
-
-  const void PopBack() override {
-    if (size_ == 0)  throw typename LinkedList<T>::IllegalAccess();
-    std::unique_ptr<ListNode> tmp(root_.prev_);
-    root_.prev_ = tmp->prev_;
-    tmp->prev_->next_ = &root_;
-    --size_;
-  }
-  size_t size() const override { return size_; }
-
-
-
- private:
-  class ListNode {
-    public:
-        ListNode(const T& value = 0) : value_(value), next_(nullptr) , prev_(nullptr) {}
-        T value_;
-        ListNode* next_;
-        ListNode* prev_;
-
-  };
-
-  ListNode root_;
-  size_t size_ = 0;
-
-    public:
-        ListNode Next() {
-            return *root_.next_;
-        }
-};
-
-
-*/
 
 
 #endif // LINKEDLIST_H
