@@ -1,29 +1,29 @@
 #ifndef STATISTICS_H
 #define STATISTICS_H
 
-
 #include "library1.h"
 #include "Linked_list.h"
 #include "Tree.h"
 
 class Statistics {
     public:
-        Statistics();
+        Statistics(int N)
+          : Plantation_ll_(new LinkedListExtraData),
+            Plantation_tree_(new Tree(-1, Plantation_ll_)),
+            Plantation_size_(N), Fruits_ll_(new LinkedListExtraData)
+        {}
         ~Statistics();
         
-        void Init(int N);                                                   // OK
-        StatusType PlantTree(int i, int j);                                 // OK
-        StatusType AddFruit(int i, int j, int fruitID, int ripeRate);       // OK
-        StatusType PickFruit(int fruitID);                                  // OK
-        StatusType RateFruit(int fruitID, int ripeRate);                    // OK
-        StatusType GetBestFruit(int i, int j, int* fruitID);                // OK
-        // kinda OK as long as the ripe rate is <= K_tree, above that i need to sort the nodes
-        StatusType GetAllFruitsByRate(int i, int j, int** fruits, int* numOffFruits); 
-        StatusType UpdateRottenFruits(int rottenBase, int rottenFactor);    // OK
+        StatusType PlantTree(int i, int j);                                             // OK
+        StatusType AddFruit(int i, int j, int fruitID, int ripeRate);                   // OK
+        StatusType PickFruit(int fruitID);                                              // OK
+        StatusType RateFruit(int fruitID, int ripeRate);                                // OK
+        StatusType GetBestFruit(int i, int j, int* fruitID);                            // OK
+        StatusType GetAllFruitsByRate(int i, int j, int** fruits, int* numOffFruits);   // OK
+        StatusType UpdateRottenFruits(int rottenBase, int rottenFactor);                // OK
 
-
-    //private:
-        // helpers
+    // helpers
+    private:
         Node* FindTree(int i, int j, Node* start_point);
         void PrintLLPlantation();
         void PrintLLFruits();
@@ -34,7 +34,6 @@ class Statistics {
         Tree* Plantation_tree_;
         int Plantation_size_;
         LinkedListExtraData* Fruits_ll_;
-
 };
 
 #endif // STATISTICS_H
