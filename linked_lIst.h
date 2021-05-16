@@ -1,11 +1,11 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
+#include "Node.h"
 #include <iostream>
 using std::cout;
 using std::endl;
 
-#include "Node.h"
 
 class LinkedList {
  public:
@@ -155,7 +155,7 @@ class LinkedListExtraData : public LinkedList
             cout << endl << endl <<
                 " ----------------- Linked list ----"
                 "-------------" << endl << endl;
-            if (size() == 0) {
+            if (IsEmpty()) {
                 cout << "ll empty" << endl;
                 return;
             }
